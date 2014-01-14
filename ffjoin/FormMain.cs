@@ -10,33 +10,6 @@ using System.Diagnostics;
 
 namespace ffjoin
 {
-    public class ListViewItemComparer : System.Collections.IComparer
-    {
-        private int _column;
-
-        /// <summary>
-        /// ListViewItemComparerクラスのコンストラクタ
-        /// </summary>
-        /// <param name="col">並び替える列番号</param>
-        public ListViewItemComparer(int col)
-        {
-            _column = col;
-        }
-
-        //xがyより小さいときはマイナスの数、大きいときはプラスの数、
-        //同じときは0を返す
-        public int Compare(object x, object y)
-        {
-            //ListViewItemの取得
-            ListViewItem itemx = (ListViewItem)x;
-            ListViewItem itemy = (ListViewItem)y;
-
-            //xとyを文字列として比較する
-            return string.Compare(itemx.SubItems[_column].Text,
-                itemy.SubItems[_column].Text);
-        }
-    }
-
     public partial class FormMain : Form
     {
         public FormMain()
@@ -51,7 +24,12 @@ namespace ffjoin
                 string[] fileName = (string[])e.Data.GetData(DataFormats.FileDrop, true);
                 foreach (string s in fileName)
                 {
-                    lvMain.Items.Add(s);
+                    FileInfo fi = new FileInfo(s);
+                    ListViewItem item = new ListViewItem();
+                    item.Text = s;
+                    item.SubItems.Add(fi.LastAccessTime.ToString());
+                    item.Tag = fi;
+                    lvMain.Items.Add(item);
                 }
             }
         }
@@ -171,10 +149,54 @@ namespace ffjoin
             File.Delete(tempfile);
         }
 
+        private bool _reverse = false;
         private void lvMain_ColumnClick(object sender, ColumnClickEventArgs e)
         {
-            lvMain.ListViewItemSorter = new ListViewItemComparer(e.Column);
+            _reverse = !_reverse;
+            lvMain.ListViewItemSorter = new ListViewItemComparer(e.Column, _reverse);
+        }
+    }
+
+    public class ListViewItemComparer : System.Collections.IComparer
+    {
+        private int _column;
+        private bool _reverse;
+        /// <summary>
+        /// ListViewItemComparerクラスのコンストラクタ
+        /// </summary>
+        /// <param name="col">並び替える列番号</param>
+        public ListViewItemComparer(int col, bool reverse)
+        {
+            _column = col;
+            _reverse = reverse;
+        }
+
+        //xがyより小さいときはマイナスの数、大きいときはプラスの数、
+        //同じときは0を返す
+        public int Compare(object x, object y)
+        {
+            //ListViewItemの取得
+            ListViewItem itemx = (ListViewItem)x;
+            ListViewItem itemy = (ListViewItem)y;
+
+            int ret = 0;
+            if (_column == 0)
+            {
+                ret = string.Compare(itemx.SubItems[_column].Text,
+                    itemy.SubItems[_column].Text);
+            }
+            else if (_column == 1)
+            {
+                FileInfo fix = (FileInfo)itemx.Tag;
+                FileInfo fiy = (FileInfo)itemy.Tag;
+
+                ret = fix.LastAccessTime.CompareTo(fiy.LastAccessTime);
+            }
+
+            return _reverse ? -ret : ret;
 
         }
     }
+
+
 }

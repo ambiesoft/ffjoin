@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual C# Express 2005
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ffjoin", "ffjoin\ffjoin.csproj", "{4F8F0163-44DA-425D-AA3F-6E30D213B343}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ffjoin", "ffjoin\ffjoin2005.csproj", "{4F8F0163-44DA-425D-AA3F-6E30D213B343}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

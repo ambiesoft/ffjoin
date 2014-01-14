@@ -30,6 +30,7 @@
         {
             this.lvMain = new System.Windows.Forms.ListView();
             this.chFile = new System.Windows.Forms.ColumnHeader();
+            this.chLastAccess = new System.Windows.Forms.ColumnHeader();
             this.btnJoin = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -37,8 +38,10 @@
             // 
             this.lvMain.AllowDrop = true;
             this.lvMain.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.chFile});
+            this.chFile,
+            this.chLastAccess});
             this.lvMain.FullRowSelect = true;
+            this.lvMain.HideSelection = false;
             this.lvMain.Location = new System.Drawing.Point(12, 12);
             this.lvMain.MultiSelect = false;
             this.lvMain.Name = "lvMain";
@@ -55,7 +58,12 @@
             // chFile
             // 
             this.chFile.Text = "File";
-            this.chFile.Width = 519;
+            this.chFile.Width = 423;
+            // 
+            // chLastAccess
+            // 
+            this.chLastAccess.Text = "Date";
+            this.chLastAccess.Width = 112;
             // 
             // btnJoin
             // 
@@ -85,6 +93,7 @@
         private System.Windows.Forms.ListView lvMain;
         private System.Windows.Forms.ColumnHeader chFile;
         private System.Windows.Forms.Button btnJoin;
+        private System.Windows.Forms.ColumnHeader chLastAccess;
     }
 }
 
