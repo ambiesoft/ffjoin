@@ -155,6 +155,16 @@ namespace ffjoin
             _reverse = !_reverse;
             lvMain.ListViewItemSorter = new ListViewItemComparer(e.Column, _reverse);
         }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            lvMain.Items.Clear();
+        }
+
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 
     public class ListViewItemComparer : System.Collections.IComparer
