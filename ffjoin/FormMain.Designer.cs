@@ -32,10 +32,14 @@
             this.lvMain = new System.Windows.Forms.ListView();
             this.chFile = new System.Windows.Forms.ColumnHeader();
             this.chLastAccess = new System.Windows.Forms.ColumnHeader();
+            this.chExt = new System.Windows.Forms.ColumnHeader();
+            this.chLength = new System.Windows.Forms.ColumnHeader();
             this.btnJoin = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.spRoot = new System.Windows.Forms.SplitContainer();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtAllduration = new System.Windows.Forms.TextBox();
             this.spRoot.Panel1.SuspendLayout();
             this.spRoot.Panel2.SuspendLayout();
             this.spRoot.SuspendLayout();
@@ -46,37 +50,47 @@
             this.lvMain.AllowDrop = true;
             this.lvMain.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.chFile,
-            this.chLastAccess});
+            this.chLastAccess,
+            this.chExt,
+            this.chLength});
             this.lvMain.FullRowSelect = true;
             this.lvMain.HideSelection = false;
             this.lvMain.Location = new System.Drawing.Point(3, 3);
             this.lvMain.MultiSelect = false;
             this.lvMain.Name = "lvMain";
-            this.lvMain.Size = new System.Drawing.Size(485, 306);
+            this.lvMain.Size = new System.Drawing.Size(646, 306);
             this.lvMain.TabIndex = 0;
             this.lvMain.UseCompatibleStateImageBehavior = false;
             this.lvMain.View = System.Windows.Forms.View.Details;
             this.lvMain.DragDrop += new System.Windows.Forms.DragEventHandler(this.lvMain_DragDrop);
             this.lvMain.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvMain_ColumnClick);
             this.lvMain.DragEnter += new System.Windows.Forms.DragEventHandler(this.lvMain_DragEnter);
-            this.lvMain.DragLeave += new System.EventHandler(this.lvMain_DragLeave);
             this.lvMain.DragOver += new System.Windows.Forms.DragEventHandler(this.lvMain_DragOver);
             // 
             // chFile
             // 
             this.chFile.Text = "File";
-            this.chFile.Width = 366;
+            this.chFile.Width = 297;
             // 
             // chLastAccess
             // 
             this.chLastAccess.Text = "Date";
             this.chLastAccess.Width = 112;
             // 
+            // chExt
+            // 
+            this.chExt.Text = "Ext";
+            // 
+            // chLength
+            // 
+            this.chLength.Text = "Length";
+            this.chLength.Width = 88;
+            // 
             // btnJoin
             // 
             this.btnJoin.Location = new System.Drawing.Point(3, 3);
             this.btnJoin.Name = "btnJoin";
-            this.btnJoin.Size = new System.Drawing.Size(485, 23);
+            this.btnJoin.Size = new System.Drawing.Size(646, 23);
             this.btnJoin.TabIndex = 1;
             this.btnJoin.Text = "&Join";
             this.btnJoin.UseVisualStyleBackColor = true;
@@ -85,19 +99,19 @@
             // btnOK
             // 
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(494, 3);
+            this.btnOK.Location = new System.Drawing.Point(655, 3);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(84, 23);
+            this.btnOK.Size = new System.Drawing.Size(92, 23);
             this.btnOK.TabIndex = 2;
-            this.btnOK.Text = "&OK";
+            this.btnOK.Text = "&Close";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
             // btnClear
             // 
-            this.btnClear.Location = new System.Drawing.Point(494, 3);
+            this.btnClear.Location = new System.Drawing.Point(655, 3);
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(84, 23);
+            this.btnClear.Size = new System.Drawing.Size(92, 23);
             this.btnClear.TabIndex = 3;
             this.btnClear.Text = "&Clear";
             this.btnClear.UseVisualStyleBackColor = true;
@@ -112,6 +126,8 @@
             // 
             // spRoot.Panel1
             // 
+            this.spRoot.Panel1.Controls.Add(this.txtAllduration);
+            this.spRoot.Panel1.Controls.Add(this.label1);
             this.spRoot.Panel1.Controls.Add(this.lvMain);
             this.spRoot.Panel1.Controls.Add(this.btnClear);
             // 
@@ -119,21 +135,39 @@
             // 
             this.spRoot.Panel2.Controls.Add(this.btnJoin);
             this.spRoot.Panel2.Controls.Add(this.btnOK);
-            this.spRoot.Size = new System.Drawing.Size(581, 358);
+            this.spRoot.Size = new System.Drawing.Size(750, 358);
             this.spRoot.SplitterDistance = 312;
             this.spRoot.TabIndex = 4;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(661, 247);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 12);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "label1";
+            // 
+            // txtAllduration
+            // 
+            this.txtAllduration.Location = new System.Drawing.Point(655, 262);
+            this.txtAllduration.Name = "txtAllduration";
+            this.txtAllduration.Size = new System.Drawing.Size(92, 19);
+            this.txtAllduration.TabIndex = 5;
             // 
             // FormMain
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(581, 358);
+            this.ClientSize = new System.Drawing.Size(750, 358);
             this.Controls.Add(this.spRoot);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormMain";
             this.Text = "ffjoin";
+            this.Load += new System.EventHandler(this.FormMain_Load);
             this.spRoot.Panel1.ResumeLayout(false);
+            this.spRoot.Panel1.PerformLayout();
             this.spRoot.Panel2.ResumeLayout(false);
             this.spRoot.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -149,6 +183,10 @@
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.SplitContainer spRoot;
+        private System.Windows.Forms.ColumnHeader chExt;
+        private System.Windows.Forms.ColumnHeader chLength;
+        private System.Windows.Forms.TextBox txtAllduration;
+        private System.Windows.Forms.Label label1;
     }
 }
 

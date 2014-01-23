@@ -17,6 +17,63 @@ namespace ffjoin
             InitializeComponent();
         }
 
+        private string getVideoLength(string filename)
+        {
+            ProcessStartInfo psi = new ProcessStartInfo();
+
+            string argument = "-i " + "\"" + filename + "\"";
+
+            psi.FileName = getffmpeg();
+            psi.Arguments = argument;
+            psi.RedirectStandardOutput = false;
+            psi.RedirectStandardError = true;
+            psi.UseShellExecute = false;
+            psi.CreateNoWindow = true;
+
+
+            Process p = Process.Start(psi);
+            // string output = p.StandardOutput.ReadToEnd();
+            string error = p.StandardError.ReadToEnd();
+            p.WaitForExit();
+            if (0 != p.ExitCode)
+            {
+            }
+
+            if (string.IsNullOrEmpty(error))
+                return error;
+
+            bool inmeta = false;
+            Dictionary<string,string> allattr = new Dictionary<string,string>();
+            string[] parts = error.Split('\n');
+            foreach (string part in parts)
+            {
+
+                string s = part.TrimEnd('\r');
+                if (s == "  Metadata:")
+                {
+                    inmeta = true;
+                }
+
+                if (inmeta)
+                {
+                    char[] c = {':'};
+                    string[] nv = s.Split(c, 2);
+                    if (nv.Length == 2 && nv[0] != null && nv[1] != null)
+                    {
+                        try
+                        {
+                            allattr.Add(nv[0].Trim(), nv[1].Trim());
+                        }
+                        catch (Exception)
+                        { 
+                        }
+                    }
+                }
+            }
+
+            string[] dparts = allattr["Duration"].Split(',');
+            return dparts[0];
+        }
         private void lvMain_DragDrop(object sender, DragEventArgs e)
         {
             if(e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -28,22 +85,49 @@ namespace ffjoin
                     ListViewItem item = new ListViewItem();
                     item.Text = s;
                     item.SubItems.Add(fi.LastAccessTime.ToString());
+                    item.SubItems.Add(fi.Extension);
+                    item.SubItems.Add(getVideoLength(s));
                     item.Tag = fi;
                     lvMain.Items.Add(item);
                 }
+                calcSum();
             }
         }
 
+        private TimeSpan getSum()
+        {
+            TimeSpan tsall = new TimeSpan();
+            foreach (ListViewItem item in lvMain.Items)
+            {
+                string s = item.SubItems[3].Text;
+                string[] parts = s.Split(':');
+                int hour;
+                int.TryParse(parts[0], out hour);
+                int minutes;
+                int.TryParse(parts[1], out minutes);
+
+                string[] mili = parts[2].Split('.');
+                int sec;
+                int.TryParse(mili[0], out sec);
+                int milisec;
+                int.TryParse(mili[1] + "0", out milisec);
+
+                TimeSpan ts = new TimeSpan(0, hour, minutes, sec, milisec);
+                tsall += ts;
+            }
+            return tsall;
+        }
+        private void calcSum()
+        {
+            txtAllduration.Text = getSum().ToString().TrimEnd('0');
+        }
         private void lvMain_DragEnter(object sender, DragEventArgs e)
         {
             if(e.Data.GetDataPresent(DataFormats.FileDrop))
                 e.Effect = DragDropEffects.Copy;
         }
 
-        private void lvMain_DragLeave(object sender, EventArgs e)
-        {
-             
-        }
+
 
         private void lvMain_DragOver(object sender, DragEventArgs e)
         {
@@ -51,6 +135,12 @@ namespace ffjoin
                 e.Effect = DragDropEffects.Copy;
         }
 
+        private string getffmpeg()
+        {
+            FileInfo fithis = new FileInfo(Application.ExecutablePath);
+            string ffmpeg = fithis.Directory + "\\ffmpeg.exe";
+            return ffmpeg;
+        }
         private void btnJoin_Click(object sender, EventArgs e)
         {
             string ext=null;
@@ -125,8 +215,8 @@ namespace ffjoin
                 outfile = sfd.FileName;
             }
 
-            FileInfo fithis = new FileInfo(Application.ExecutablePath);
-            string ffmpeg = fithis.Directory + "\\ffmpeg.exe";
+            // FileInfo fithis = new FileInfo(Application.ExecutablePath);
+            string ffmpeg = getffmpeg();
             string argument = "-f concat -i \"";
 
             argument += tempfile;
@@ -146,6 +236,13 @@ namespace ffjoin
 
             Process p = Process.Start(psi);
             p.WaitForExit();
+            string prevsum = getSum().ToString().TrimEnd('0');
+            string resultsum = getVideoLength(outfile);
+            MessageBox.Show(this,
+                "prev sum duration =\t" + prevsum + "\r\n" + "result duration =\t\t" + resultsum,
+                Application.ProductName,
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
             File.Delete(tempfile);
         }
 
@@ -159,12 +256,28 @@ namespace ffjoin
         private void btnClear_Click(object sender, EventArgs e)
         {
             lvMain.Items.Clear();
+            calcSum();
         }
 
         private void btnOK_Click(object sender, EventArgs e)
         {
             Close();
         }
+
+        private void FormMain_Load(object sender, EventArgs e)
+        {
+            string ffmpeg = getffmpeg();
+            if (!File.Exists(ffmpeg))
+            {
+                MessageBox.Show("ffmpeg not found. Exiting.",
+                    Application.ProductName,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                Close();
+            }
+        }
+
+
     }
 
     public class ListViewItemComparer : System.Collections.IComparer
@@ -202,7 +315,15 @@ namespace ffjoin
 
                 ret = fix.LastAccessTime.CompareTo(fiy.LastAccessTime);
             }
-
+            else if(_column==2)
+            {
+                ret = string.Compare(itemx.SubItems[_column].Text,
+                    itemy.SubItems[_column].Text,true);
+            }
+            else
+            {
+                Debug.Assert(false);
+            }
             return _reverse ? -ret : ret;
 
         }
