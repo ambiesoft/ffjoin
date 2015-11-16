@@ -38,8 +38,8 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.spRoot = new System.Windows.Forms.SplitContainer();
-            this.label1 = new System.Windows.Forms.Label();
             this.txtAllduration = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.spRoot.Panel1.SuspendLayout();
             this.spRoot.Panel2.SuspendLayout();
             this.spRoot.SuspendLayout();
@@ -139,6 +139,13 @@
             this.spRoot.SplitterDistance = 312;
             this.spRoot.TabIndex = 4;
             // 
+            // txtAllduration
+            // 
+            this.txtAllduration.Location = new System.Drawing.Point(655, 262);
+            this.txtAllduration.Name = "txtAllduration";
+            this.txtAllduration.Size = new System.Drawing.Size(92, 19);
+            this.txtAllduration.TabIndex = 5;
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -147,13 +154,6 @@
             this.label1.Size = new System.Drawing.Size(35, 12);
             this.label1.TabIndex = 4;
             this.label1.Text = "label1";
-            // 
-            // txtAllduration
-            // 
-            this.txtAllduration.Location = new System.Drawing.Point(655, 262);
-            this.txtAllduration.Name = "txtAllduration";
-            this.txtAllduration.Size = new System.Drawing.Size(92, 19);
-            this.txtAllduration.TabIndex = 5;
             // 
             // FormMain
             // 
@@ -166,6 +166,7 @@
             this.Name = "FormMain";
             this.Text = "ffjoin";
             this.Load += new System.EventHandler(this.FormMain_Load);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMain_FormClosed);
             this.spRoot.Panel1.ResumeLayout(false);
             this.spRoot.Panel1.PerformLayout();
             this.spRoot.Panel2.ResumeLayout(false);

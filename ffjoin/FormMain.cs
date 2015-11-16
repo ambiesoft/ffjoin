@@ -12,6 +12,9 @@ namespace ffjoin
 {
     public partial class FormMain : Form
     {
+        private string ffmpeg_;
+        private string inipath_;
+
         public FormMain()
         {
             InitializeComponent();
@@ -135,12 +138,59 @@ namespace ffjoin
                 e.Effect = DragDropEffects.Copy;
         }
 
+
         private string getffmpeg()
         {
+            if (File.Exists(ffmpeg_))
+                return ffmpeg_;
+
             FileInfo fithis = new FileInfo(Application.ExecutablePath);
-            string ffmpeg = fithis.Directory + "\\ffmpeg.exe";
-            return ffmpeg;
+            ffmpeg_ = fithis.Directory + "\\ffmpeg.exe";
+            if (File.Exists(ffmpeg_))
+                return ffmpeg_;
+
+            OpenFileDialog ofd = new OpenFileDialog();
+
+            //はじめのファイル名を指定する
+            //はじめに「ファイル名」で表示される文字列を指定する
+            ofd.FileName = "ffmpeg.exe";
+
+            //はじめに表示されるフォルダを指定する
+            //指定しない（空の文字列）の時は、現在のディレクトリが表示される
+            ofd.InitialDirectory = @"C:\";
+            
+            //[ファイルの種類]に表示される選択肢を指定する
+            //指定しないとすべてのファイルが表示される
+            ofd.Filter = "Executable (*.exe)|*.exe";
+            
+            //[ファイルの種類]ではじめに
+            //「すべてのファイル」が選択されているようにする
+            ofd.FilterIndex = 1;
+            
+            //タイトルを設定する
+            ofd.Title = "Choose ffmpeg";
+
+            //ダイアログボックスを閉じる前に現在のディレクトリを復元するようにする
+            // ofd.RestoreDirectory = true;
+
+            //存在しないファイルの名前が指定されたとき警告を表示する
+            //デフォルトでTrueなので指定する必要はない
+            ofd.CheckFileExists = true;
+            
+            //存在しないパスが指定されたとき警告を表示する
+            //デフォルトでTrueなので指定する必要はない
+            ofd.CheckPathExists = true;
+
+            //ダイアログを表示する
+            if (ofd.ShowDialog() != DialogResult.OK)
+            {
+                return "";
+            }
+            ffmpeg_ = ofd.FileName;
+            ofd.Dispose();
+            return ffmpeg_;
         }
+
         private void btnJoin_Click(object sender, EventArgs e)
         {
             string ext=null;
@@ -266,16 +316,28 @@ namespace ffjoin
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            string ffmpeg = getffmpeg();
-            if (!File.Exists(ffmpeg))
+            string inipath = Application.ExecutablePath;
+            inipath = Path.GetDirectoryName(inipath);
+            inipath = Path.Combine(inipath, Application.ProductName + ".ini");
+            Ambiesoft.Profile.Profile.GetString("option", "ffmpeg", "", out ffmpeg_, inipath);
+            inipath_ = inipath;
+            getffmpeg();
+        }
+
+        private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            bool failed = false;
+            failed |= !Ambiesoft.Profile.Profile.WriteString("option", "ffmpeg", ffmpeg_, inipath_);
+
+            if (failed)
             {
-                MessageBox.Show("ffmpeg not found. Exiting.",
+                MessageBox.Show(Properties.Resources.S_INISAVE_FAILED,
                     Application.ProductName,
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                Close();
             }
         }
+
 
 
     }
