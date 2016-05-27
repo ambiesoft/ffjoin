@@ -204,7 +204,7 @@ namespace ffjoin
                 {
                     if (string.Compare(ext, fi.Extension, true) != 0)
                     {
-                        MessageBox.Show("ext");
+                        Ambiesoft.CenteredMessageBox.Show(this, "ext");
                         return;
                     }
                 }
@@ -288,7 +288,7 @@ namespace ffjoin
             p.WaitForExit();
             string prevsum = getSum().ToString().TrimEnd('0');
             string resultsum = getVideoLength(outfile);
-            MessageBox.Show(this,
+            Ambiesoft.CenteredMessageBox.Show(this,
                 "prev sum duration =\t" + prevsum + "\r\n" + "result duration =\t\t" + resultsum,
                 Application.ProductName,
                 MessageBoxButtons.OK,
@@ -319,7 +319,7 @@ namespace ffjoin
             string inipath = Application.ExecutablePath;
             inipath = Path.GetDirectoryName(inipath);
             inipath = Path.Combine(inipath, Application.ProductName + ".ini");
-            Ambiesoft.Profile.Profile.GetString("option", "ffmpeg", "", out ffmpeg_, inipath);
+            Ambiesoft.Profile.GetString("option", "ffmpeg", "", out ffmpeg_, inipath);
             inipath_ = inipath;
             getffmpeg();
         }
@@ -327,11 +327,12 @@ namespace ffjoin
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
         {
             bool failed = false;
-            failed |= !Ambiesoft.Profile.Profile.WriteString("option", "ffmpeg", ffmpeg_, inipath_);
+            failed |= !Ambiesoft.Profile.WriteString("option", "ffmpeg", ffmpeg_, inipath_);
 
             if (failed)
             {
-                MessageBox.Show(Properties.Resources.S_INISAVE_FAILED,
+                Ambiesoft.CenteredMessageBox.Show(this,
+                    Properties.Resources.S_INISAVE_FAILED,
                     Application.ProductName,
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
