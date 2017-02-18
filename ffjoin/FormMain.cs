@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace ffjoin
 {
@@ -20,6 +21,76 @@ namespace ffjoin
             InitializeComponent();
         }
 
+        private string getVideoLengthWork(string ins)
+        {
+            string ret;
+            ret = getVL1(ins);
+            if (!string.IsNullOrEmpty(ret))
+                return ret;
+
+            ret = getVL2(ins);
+            if (!string.IsNullOrEmpty(ret))
+                return ret;
+
+            return string.Empty;
+        }
+        private string getVL1(string ins)
+        {
+            Regex reg = new Regex(@"Duration: (?<duration>.*?), start");
+
+            string[] parts = ins.Split('\n');
+            foreach (string part in parts)
+            {
+                string s = part.TrimEnd('\r');
+                Match match = reg.Match(s);
+                if (match.Success)
+                {
+                    return match.Groups["duration"].Value;
+                    //return match.Value;
+                }
+            }
+            return string.Empty;
+        }
+        private string getVL2(string ins)
+        {
+            bool inmeta = false;
+            Dictionary<string, string> allattr = new Dictionary<string, string>();
+            string[] parts = ins.Split('\n');
+            foreach (string part in parts)
+            {
+                string s = part.TrimEnd('\r');
+                if (s == "  Metadata:")
+                {
+                    inmeta = true;
+                }
+
+                if (inmeta)
+                {
+                    char[] c = { ':' };
+                    string[] nv = s.Split(c, 2);
+                    if (nv.Length == 2 && nv[0] != null && nv[1] != null)
+                    {
+                        try
+                        {
+                            allattr.Add(nv[0].Trim(), nv[1].Trim());
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                }
+            }
+
+            try
+            {
+                string[] dparts = allattr["Duration"].Split(',');
+                return dparts[0];
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+        }
         private string getVideoLength(string filename)
         {
             ProcessStartInfo psi = new ProcessStartInfo();
@@ -45,37 +116,7 @@ namespace ffjoin
             if (string.IsNullOrEmpty(error))
                 return error;
 
-            bool inmeta = false;
-            Dictionary<string,string> allattr = new Dictionary<string,string>();
-            string[] parts = error.Split('\n');
-            foreach (string part in parts)
-            {
-
-                string s = part.TrimEnd('\r');
-                if (s == "  Metadata:")
-                {
-                    inmeta = true;
-                }
-
-                if (inmeta)
-                {
-                    char[] c = {':'};
-                    string[] nv = s.Split(c, 2);
-                    if (nv.Length == 2 && nv[0] != null && nv[1] != null)
-                    {
-                        try
-                        {
-                            allattr.Add(nv[0].Trim(), nv[1].Trim());
-                        }
-                        catch (Exception)
-                        { 
-                        }
-                    }
-                }
-            }
-
-            string[] dparts = allattr["Duration"].Split(',');
-            return dparts[0];
+            return getVideoLengthWork(error);
         }
         private void lvMain_DragDrop(object sender, DragEventArgs e)
         {
@@ -99,26 +140,33 @@ namespace ffjoin
 
         private TimeSpan getSum()
         {
-            TimeSpan tsall = new TimeSpan();
-            foreach (ListViewItem item in lvMain.Items)
+            try
             {
-                string s = item.SubItems[3].Text;
-                string[] parts = s.Split(':');
-                int hour;
-                int.TryParse(parts[0], out hour);
-                int minutes;
-                int.TryParse(parts[1], out minutes);
+                TimeSpan tsall = new TimeSpan();
+                foreach (ListViewItem item in lvMain.Items)
+                {
+                    string s = item.SubItems[3].Text;
+                    string[] parts = s.Split(':');
+                    int hour;
+                    int.TryParse(parts[0], out hour);
+                    int minutes;
+                    int.TryParse(parts[1], out minutes);
 
-                string[] mili = parts[2].Split('.');
-                int sec;
-                int.TryParse(mili[0], out sec);
-                int milisec;
-                int.TryParse(mili[1] + "0", out milisec);
+                    string[] mili = parts[2].Split('.');
+                    int sec;
+                    int.TryParse(mili[0], out sec);
+                    int milisec;
+                    int.TryParse(mili[1] + "0", out milisec);
 
-                TimeSpan ts = new TimeSpan(0, hour, minutes, sec, milisec);
-                tsall += ts;
+                    TimeSpan ts = new TimeSpan(0, hour, minutes, sec, milisec);
+                    tsall += ts;
+                }
+                return tsall;
             }
-            return tsall;
+            catch (Exception)
+            {
+                return new TimeSpan(0);
+            }
         }
         private void calcSum()
         {
