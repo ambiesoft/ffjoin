@@ -252,7 +252,7 @@ namespace ffjoin
                 {
                     if (string.Compare(ext, fi.Extension, true) != 0)
                     {
-                        Ambiesoft.CenteredMessageBox.Show(this, "ext");
+                        Ambiesoft.CenteredMessageBox.Show(this, Properties.Resources.S_DIFFERENT_EXTENSION);
                         return;
                     }
                 }
@@ -385,6 +385,126 @@ namespace ffjoin
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
+        }
+
+        private void btnJoinDifferent_Click(object sender, EventArgs e)
+        {
+            string outfilename = null;
+            foreach (ListViewItem item in lvMain.Items)
+            {
+                string file = item.Text;
+                FileInfo fi = new FileInfo(file);
+                if (outfilename == null)
+                    outfilename = fi.Name;
+                else
+                {
+                    int isame = 0;
+                    try
+                    {
+                        for (int i = 0; i < fi.Name.Length; ++i)
+                        {
+                            if (fi.Name[i] == outfilename[i])
+                                isame = i + 1;
+                            else
+                                break;
+                        }
+                    }
+                    catch (Exception) { }
+
+                    outfilename = outfilename.Substring(0, isame);
+                }
+            }
+            //string tempfile = Path.GetTempFileName();
+            //using (TextWriter writer = File.CreateText(tempfile))
+            //{
+            //    foreach (ListViewItem item in lvMain.Items)
+            //    {
+            //        writer.Write(@"file '");
+            //        writer.Write(item.Text);
+            //        writer.Write(@"'");
+            //        writer.WriteLine();
+            //    }
+            //}
+
+            
+            string outfile = null;
+            string[] availableext = { "mp4", "avi" };
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.FileName = outfilename;
+                StringBuilder sbFilter = new StringBuilder();
+                foreach (string ae in availableext)
+                {
+                    sbFilter.Append(ae);
+                    sbFilter.Append("File ");
+                    sbFilter.Append("(*.");
+
+
+                    sbFilter.Append(ae);
+                    sbFilter.Append(")|*.");
+                    sbFilter.Append(ae);
+                    sbFilter.Append("|");
+                }
+                sbFilter.Append("All File(*.*)|*.*");
+
+                sfd.Filter = sbFilter.ToString();
+                if (DialogResult.OK != sfd.ShowDialog(this))
+                    return;
+
+                outfile = sfd.FileName;
+            }
+
+            
+            string ffmpeg = getffmpeg();
+
+
+            // c:\work>c:\LegacyPrograms\ffmpeg\bin\ffmpeg.exe -i stream_0.mp4 -i stream_1.mp4
+            // -filter_complex "[0:v:0] [0:a:0] [1:v:0] [1:a:0] concat=n=2:v=1:a=1 [v] [a]" -ma
+            // p "[v]" -map "[a]" aaa.mp4
+            
+            // -i "C:\work\stream_0.mp4" -i "C:\work\stream_1.mp4" 
+            // -filter_complex "[0:v:0] [0:a:0] [1:v:1] [1:a:1] concat=n=2:v=1:a=1 [v] [a]" -ma
+            // p "[v]" -map "[a]" "C:\Users\1dollar\Desktop\4.mp4"
+
+            string argument="";
+            foreach (ListViewItem item in lvMain.Items)
+            {
+                argument += "-i \"" + item.Text + "\" ";
+            }
+
+            argument += "-filter_complex \"";
+            string tmp="";
+            for (int i = 0; i < lvMain.Items.Count; ++i)
+            {
+                tmp += string.Format("[{0}:v:0] [{1}:a:0] ", i, i);
+            }
+            argument += tmp;
+
+            argument += string.Format("concat=n={0}:v=1:a=1 [v] [a]\" ", lvMain.Items.Count);
+
+            argument += "-map \"[v]\" -map \"[a]\" ";
+
+            argument += "\"" + outfile + "\"";
+
+            ProcessStartInfo psi = new ProcessStartInfo();
+            psi.FileName = ffmpeg;
+            psi.Arguments = argument;
+            psi.RedirectStandardOutput = false;
+            psi.RedirectStandardError = false;
+            psi.UseShellExecute = false;
+            psi.CreateNoWindow = false;
+
+            Process p = Process.Start(psi);
+            p.WaitForExit();
+            
+            string prevsum = getSum().ToString().TrimEnd('0');
+            string resultsum = getVideoLength(outfile);
+            Ambiesoft.CenteredMessageBox.Show(this,
+                "prev sum duration =\t" + prevsum + "\r\n" + "result duration =\t\t" + resultsum,
+                Application.ProductName,
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+            //File.Delete(tempfile);
         }
 
 

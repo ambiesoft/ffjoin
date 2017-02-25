@@ -40,6 +40,7 @@
             this.spRoot = new System.Windows.Forms.SplitContainer();
             this.txtAllduration = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnJoinDifferent = new System.Windows.Forms.Button();
             this.spRoot.Panel1.SuspendLayout();
             this.spRoot.Panel2.SuspendLayout();
             this.spRoot.SuspendLayout();
@@ -58,7 +59,7 @@
             this.lvMain.Location = new System.Drawing.Point(3, 3);
             this.lvMain.MultiSelect = false;
             this.lvMain.Name = "lvMain";
-            this.lvMain.Size = new System.Drawing.Size(646, 306);
+            this.lvMain.Size = new System.Drawing.Size(646, 331);
             this.lvMain.TabIndex = 0;
             this.lvMain.UseCompatibleStateImageBehavior = false;
             this.lvMain.View = System.Windows.Forms.View.Details;
@@ -90,9 +91,9 @@
             // 
             this.btnJoin.Location = new System.Drawing.Point(3, 3);
             this.btnJoin.Name = "btnJoin";
-            this.btnJoin.Size = new System.Drawing.Size(646, 23);
+            this.btnJoin.Size = new System.Drawing.Size(298, 25);
             this.btnJoin.TabIndex = 1;
-            this.btnJoin.Text = "&Join";
+            this.btnJoin.Text = "&Join Normal";
             this.btnJoin.UseVisualStyleBackColor = true;
             this.btnJoin.Click += new System.EventHandler(this.btnJoin_Click);
             // 
@@ -101,7 +102,7 @@
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOK.Location = new System.Drawing.Point(655, 3);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(92, 23);
+            this.btnOK.Size = new System.Drawing.Size(92, 25);
             this.btnOK.TabIndex = 2;
             this.btnOK.Text = "&Close";
             this.btnOK.UseVisualStyleBackColor = true;
@@ -111,7 +112,7 @@
             // 
             this.btnClear.Location = new System.Drawing.Point(655, 3);
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(92, 23);
+            this.btnClear.Size = new System.Drawing.Size(92, 25);
             this.btnClear.TabIndex = 3;
             this.btnClear.Text = "&Clear";
             this.btnClear.UseVisualStyleBackColor = true;
@@ -133,34 +134,45 @@
             // 
             // spRoot.Panel2
             // 
+            this.spRoot.Panel2.Controls.Add(this.btnJoinDifferent);
             this.spRoot.Panel2.Controls.Add(this.btnJoin);
             this.spRoot.Panel2.Controls.Add(this.btnOK);
-            this.spRoot.Size = new System.Drawing.Size(750, 358);
-            this.spRoot.SplitterDistance = 312;
+            this.spRoot.Size = new System.Drawing.Size(750, 388);
+            this.spRoot.SplitterDistance = 338;
             this.spRoot.TabIndex = 4;
             // 
             // txtAllduration
             // 
-            this.txtAllduration.Location = new System.Drawing.Point(655, 262);
+            this.txtAllduration.Location = new System.Drawing.Point(655, 284);
             this.txtAllduration.Name = "txtAllduration";
-            this.txtAllduration.Size = new System.Drawing.Size(92, 19);
+            this.txtAllduration.Size = new System.Drawing.Size(92, 20);
             this.txtAllduration.TabIndex = 5;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(661, 247);
+            this.label1.Location = new System.Drawing.Point(661, 268);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 12);
+            this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 4;
             this.label1.Text = "label1";
+            // 
+            // btnJoinDifferent
+            // 
+            this.btnJoinDifferent.Location = new System.Drawing.Point(351, 5);
+            this.btnJoinDifferent.Name = "btnJoinDifferent";
+            this.btnJoinDifferent.Size = new System.Drawing.Size(298, 23);
+            this.btnJoinDifferent.TabIndex = 3;
+            this.btnJoinDifferent.Text = "&Join Different Codec";
+            this.btnJoinDifferent.UseVisualStyleBackColor = true;
+            this.btnJoinDifferent.Click += new System.EventHandler(this.btnJoinDifferent_Click);
             // 
             // FormMain
             // 
             this.AcceptButton = this.btnOK;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(750, 358);
+            this.ClientSize = new System.Drawing.Size(750, 388);
             this.Controls.Add(this.spRoot);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormMain";
@@ -188,6 +200,7 @@
         private System.Windows.Forms.ColumnHeader chLength;
         private System.Windows.Forms.TextBox txtAllduration;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnJoinDifferent;
     }
 }
 
