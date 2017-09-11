@@ -187,8 +187,11 @@ namespace ffjoin
         }
 
 
-        private string getffmpeg()
+        private string getffmpeg(bool reset)
         {
+            if (reset)
+                ffmpeg_ = null;
+
             if (File.Exists(ffmpeg_))
                 return ffmpeg_;
 
@@ -205,7 +208,7 @@ namespace ffjoin
 
             //はじめに表示されるフォルダを指定する
             //指定しない（空の文字列）の時は、現在のディレクトリが表示される
-            ofd.InitialDirectory = @"C:\";
+            // ofd.InitialDirectory = @"C:\";
             
             //[ファイルの種類]に表示される選択肢を指定する
             //指定しないとすべてのファイルが表示される
@@ -216,7 +219,7 @@ namespace ffjoin
             ofd.FilterIndex = 1;
             
             //タイトルを設定する
-            ofd.Title = "Choose ffmpeg";
+            ofd.Title = Properties.Resources.S_CHOOSE_FFMPEG;
 
             //ダイアログボックスを閉じる前に現在のディレクトリを復元するようにする
             // ofd.RestoreDirectory = true;
@@ -235,12 +238,42 @@ namespace ffjoin
                 return "";
             }
             ffmpeg_ = ofd.FileName;
+            UpdateTitle();
             ofd.Dispose();
             return ffmpeg_;
+        }
+        string getffmpeg()
+        {
+            return getffmpeg(false);
+        }
+        void UpdateTitle()
+        {
+            if (!this.IsHandleCreated)
+                return;
+            if (this.IsDisposed)
+                return;
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append(Application.ProductName).Append(" | ").Append(ffmpeg_);
+            this.Text = sb.ToString();
+        }
+            
+        void Alert(string message)
+        {
+            MessageBox.Show(message,
+                Application.ProductName,
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Exclamation);
         }
 
         private void btnJoin_Click(object sender, EventArgs e)
         {
+            if (lvMain.Items.Count < 2)
+            {
+                Alert(Properties.Resources.S_LESSTHAN_TWO_ITEMS);
+                return;
+            }
+
             string ext=null;
             foreach (ListViewItem item in lvMain.Items)
             {
@@ -273,7 +306,7 @@ namespace ffjoin
                         for (int i = 0; i < fi.Name.Length; ++i)
                         {
                             if (fi.Name[i] == outfilename[i])
-                                isame = i+1;
+                                isame = i + 1;
                             else
                                 break;
                         }
@@ -283,6 +316,27 @@ namespace ffjoin
                     outfilename = outfilename.Substring(0, isame);
                 }
             }
+
+            // find initdir for savedialog
+            string initDir = null;
+            foreach (ListViewItem item in lvMain.Items)
+            {
+                string d = Path.GetDirectoryName(item.Text);
+                if (initDir == null)
+                {
+                    initDir = d;
+                    continue;
+                }
+
+                if (d != initDir)
+                {
+                    initDir = null;
+                    return;
+                }
+            }
+
+
+
             string tempfile = Path.GetTempFileName();
             using (TextWriter writer = File.CreateText(tempfile))
             {
@@ -307,6 +361,7 @@ namespace ffjoin
                 filter += extwithout;
                 filter += "|All File(*.*)|*.*";
                 sfd.Filter=filter;
+                sfd.InitialDirectory = initDir;
                 if(DialogResult.OK != sfd.ShowDialog(this))
                     return;
 
@@ -315,7 +370,7 @@ namespace ffjoin
 
             // FileInfo fithis = new FileInfo(Application.ExecutablePath);
             string ffmpeg = getffmpeg();
-            string argument = "-f concat -i \"";
+            string argument = "-safe 0 -f concat -i \"";
 
             argument += tempfile;
             argument += "\"";
@@ -362,15 +417,7 @@ namespace ffjoin
             Close();
         }
 
-        private void FormMain_Load(object sender, EventArgs e)
-        {
-            string inipath = Application.ExecutablePath;
-            inipath = Path.GetDirectoryName(inipath);
-            inipath = Path.Combine(inipath, Application.ProductName + ".ini");
-            Ambiesoft.Profile.GetString("option", "ffmpeg", "", out ffmpeg_, inipath);
-            inipath_ = inipath;
-            getffmpeg();
-        }
+       
 
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -389,6 +436,11 @@ namespace ffjoin
 
         private void btnJoinDifferent_Click(object sender, EventArgs e)
         {
+            if (lvMain.Items.Count < 2)
+            {
+                Alert(Properties.Resources.S_LESSTHAN_TWO_ITEMS);
+                return;
+            }
             string outfilename = null;
             foreach (ListViewItem item in lvMain.Items)
             {
@@ -414,18 +466,6 @@ namespace ffjoin
                     outfilename = outfilename.Substring(0, isame);
                 }
             }
-            //string tempfile = Path.GetTempFileName();
-            //using (TextWriter writer = File.CreateText(tempfile))
-            //{
-            //    foreach (ListViewItem item in lvMain.Items)
-            //    {
-            //        writer.Write(@"file '");
-            //        writer.Write(item.Text);
-            //        writer.Write(@"'");
-            //        writer.WriteLine();
-            //    }
-            //}
-
             
             string outfile = null;
             string[] availableext = { "mp4", "avi" };
@@ -507,6 +547,12 @@ namespace ffjoin
             //File.Delete(tempfile);
         }
 
+        private void btnSetffmpeg_Click(object sender, EventArgs e)
+        {
+            getffmpeg(true);
+        }
+
+      
 
 
     }

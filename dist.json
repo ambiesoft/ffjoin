@@ -1,0 +1,19 @@
+{
+	"name": "ffjoin",
+	"solution": "ffjoin2013.sln",
+	"configuration": "Release",
+    "targets": [
+            {
+                "outdir" : "C:/Linkout/ffjoin/",
+                "setoutdirforbuild": true
+            }
+    ],
+    "archivedir": "C:/Linkout/",
+    "remotedir": "http://ambiesoft.fam.cx/ffdav/uploads/ffjoin/",
+    
+    "TotalFileCount": 7,
+    
+   
+    "obtainverfrom": "history.txt",
+    "obtainverregex": "\\d+\\.\\d+"
+}

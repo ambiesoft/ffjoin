@@ -1,6 +1,5 @@
-
-# /
-/ffjoin2008.suo
+*.user
+*.suo
 
 # /ffjoin/
 /ffjoin/bin

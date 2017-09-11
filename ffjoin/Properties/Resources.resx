@@ -117,10 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="S_CHOOSE_FFMPEG" xml:space="preserve">
+    <value>Choose ffmpeg</value>
+  </data>
   <data name="S_DIFFERENT_EXTENSION" xml:space="preserve">
     <value>File extensions are different.</value>
   </data>
   <data name="S_INISAVE_FAILED" xml:space="preserve">
     <value>Failed to save to ini</value>
+  </data>
+  <data name="S_LESSTHAN_TWO_ITEMS" xml:space="preserve">
+    <value>It needs at least two files to join.</value>
   </data>
 </root>
