@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
-            this.lvMain = new System.Windows.Forms.ListView();
+            this.lvMain = new ListViewCustomReorder.ListViewEx();
             this.chFile = new System.Windows.Forms.ColumnHeader();
             this.chLastAccess = new System.Windows.Forms.ColumnHeader();
             this.chExt = new System.Windows.Forms.ColumnHeader();
@@ -57,15 +57,20 @@
             this.chLength});
             this.lvMain.FullRowSelect = true;
             this.lvMain.HideSelection = false;
-            this.lvMain.Location = new System.Drawing.Point(12, 12);
+            this.lvMain.LineAfter = -1;
+            this.lvMain.LineBefore = -1;
+            this.lvMain.Location = new System.Drawing.Point(12, 13);
             this.lvMain.MultiSelect = false;
             this.lvMain.Name = "lvMain";
-            this.lvMain.Size = new System.Drawing.Size(633, 302);
+            this.lvMain.Size = new System.Drawing.Size(633, 327);
             this.lvMain.TabIndex = 0;
             this.lvMain.UseCompatibleStateImageBehavior = false;
             this.lvMain.View = System.Windows.Forms.View.Details;
+            this.lvMain.MouseUp += new System.Windows.Forms.MouseEventHandler(this.lvMain_MouseUp);
             this.lvMain.DragDrop += new System.Windows.Forms.DragEventHandler(this.lvMain_DragDrop);
             this.lvMain.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvMain_ColumnClick);
+            this.lvMain.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lvMain_MouseMove);
+            this.lvMain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lvMain_MouseDown);
             this.lvMain.DragEnter += new System.Windows.Forms.DragEventHandler(this.lvMain_DragEnter);
             this.lvMain.DragOver += new System.Windows.Forms.DragEventHandler(this.lvMain_DragOver);
             // 
@@ -91,9 +96,9 @@
             // btnJoin
             // 
             this.btnJoin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnJoin.Location = new System.Drawing.Point(12, 322);
+            this.btnJoin.Location = new System.Drawing.Point(12, 349);
             this.btnJoin.Name = "btnJoin";
-            this.btnJoin.Size = new System.Drawing.Size(313, 23);
+            this.btnJoin.Size = new System.Drawing.Size(313, 25);
             this.btnJoin.TabIndex = 6;
             this.btnJoin.Text = "&Join Normal";
             this.btnJoin.UseVisualStyleBackColor = true;
@@ -103,9 +108,9 @@
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(651, 322);
+            this.btnOK.Location = new System.Drawing.Point(651, 349);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(92, 23);
+            this.btnOK.Size = new System.Drawing.Size(92, 25);
             this.btnOK.TabIndex = 8;
             this.btnOK.Text = "&Close";
             this.btnOK.UseVisualStyleBackColor = true;
@@ -114,9 +119,9 @@
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new System.Drawing.Point(651, 10);
+            this.btnClear.Location = new System.Drawing.Point(651, 11);
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(92, 23);
+            this.btnClear.Size = new System.Drawing.Size(92, 25);
             this.btnClear.TabIndex = 1;
             this.btnClear.Text = "&Clear";
             this.btnClear.UseVisualStyleBackColor = true;
@@ -125,9 +130,9 @@
             // btnSetffmpeg
             // 
             this.btnSetffmpeg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSetffmpeg.Location = new System.Drawing.Point(651, 207);
+            this.btnSetffmpeg.Location = new System.Drawing.Point(651, 224);
             this.btnSetffmpeg.Name = "btnSetffmpeg";
-            this.btnSetffmpeg.Size = new System.Drawing.Size(92, 23);
+            this.btnSetffmpeg.Size = new System.Drawing.Size(92, 25);
             this.btnSetffmpeg.TabIndex = 2;
             this.btnSetffmpeg.Text = "set &ffmpeg";
             this.btnSetffmpeg.UseVisualStyleBackColor = true;
@@ -136,28 +141,28 @@
             // txtAllduration
             // 
             this.txtAllduration.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtAllduration.Location = new System.Drawing.Point(651, 260);
+            this.txtAllduration.Location = new System.Drawing.Point(651, 282);
             this.txtAllduration.Name = "txtAllduration";
             this.txtAllduration.ReadOnly = true;
-            this.txtAllduration.Size = new System.Drawing.Size(92, 19);
+            this.txtAllduration.Size = new System.Drawing.Size(92, 20);
             this.txtAllduration.TabIndex = 4;
             // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(651, 245);
+            this.label1.Location = new System.Drawing.Point(651, 265);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(46, 12);
+            this.label1.Size = new System.Drawing.Size(45, 13);
             this.label1.TabIndex = 3;
             this.label1.Text = "&duration";
             // 
             // btnJoinDifferent
             // 
             this.btnJoinDifferent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnJoinDifferent.Location = new System.Drawing.Point(332, 322);
+            this.btnJoinDifferent.Location = new System.Drawing.Point(332, 349);
             this.btnJoinDifferent.Name = "btnJoinDifferent";
-            this.btnJoinDifferent.Size = new System.Drawing.Size(313, 23);
+            this.btnJoinDifferent.Size = new System.Drawing.Size(313, 25);
             this.btnJoinDifferent.TabIndex = 7;
             this.btnJoinDifferent.Text = "&Join Different Codec";
             this.btnJoinDifferent.UseVisualStyleBackColor = true;
@@ -166,9 +171,9 @@
             // btnAbout
             // 
             this.btnAbout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAbout.Location = new System.Drawing.Point(651, 291);
+            this.btnAbout.Location = new System.Drawing.Point(651, 315);
             this.btnAbout.Name = "btnAbout";
-            this.btnAbout.Size = new System.Drawing.Size(92, 23);
+            this.btnAbout.Size = new System.Drawing.Size(92, 25);
             this.btnAbout.TabIndex = 5;
             this.btnAbout.Text = "&About";
             this.btnAbout.UseVisualStyleBackColor = true;
@@ -177,9 +182,9 @@
             // FormMain
             // 
             this.AcceptButton = this.btnOK;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(746, 355);
+            this.ClientSize = new System.Drawing.Size(754, 395);
             this.Controls.Add(this.btnAbout);
             this.Controls.Add(this.btnJoin);
             this.Controls.Add(this.btnJoinDifferent);
@@ -190,7 +195,7 @@
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.lvMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(762, 393);
+            this.MinimumSize = new System.Drawing.Size(762, 423);
             this.Name = "FormMain";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "ffjoin";
@@ -203,7 +208,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ListView lvMain;
+        private ListViewCustomReorder.ListViewEx lvMain;
         private System.Windows.Forms.ColumnHeader chFile;
         private System.Windows.Forms.Button btnJoin;
         private System.Windows.Forms.ColumnHeader chLastAccess;
