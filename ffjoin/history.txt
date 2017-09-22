@@ -1,2 +1,5 @@
-﻿2017/09/11 ver1.0
+﻿2017/09/23 ver1.1
+DnD reordering
+
+2017/09/11 ver1.0
 beta release

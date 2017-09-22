@@ -7,7 +7,7 @@ namespace ffjoin
     static class Program
     {
         /// <summary>
-        /// アプリケーションのメイン エントリ ポイントです。
+        /// 
         /// </summary>
         [STAThread]
         static void Main()

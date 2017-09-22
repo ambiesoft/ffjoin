@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -9,16 +9,66 @@ using System.IO;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
+using Ambiesoft;
+
 namespace ffjoin
 {
     public partial class FormMain : Form
     {
         private string ffmpeg_;
-        private string inipath_;
+        
 
+        const string SECTION_OPTION = "Option";
+        const string KEY_COLUMN_WIDTH = "ColumnWidth";
+
+        const string COLUMN_FILE = "File";
+        const string COLUMN_DATE = "Date";
+        const string COLUMN_EXTENTION = "Extention";
+        const string COLUMN_DURATION = "Duration";
+
+        string IniPath
+        {
+            get
+            {
+                string inipath = Application.ExecutablePath;
+                inipath = Path.GetDirectoryName(inipath);
+                return Path.Combine(inipath, Application.ProductName + ".ini");
+            }
+        }
         public FormMain()
         {
             InitializeComponent();
+
+            ColumnHeader ch = null;
+
+            ch = new ColumnHeader();
+            ch.Name = COLUMN_FILE;
+            ch.Text = Properties.Resources.COLUMN_FILE;
+            ch.Width = 100;
+            lvMain.Columns.Add(ch);
+
+            ch = new ColumnHeader();
+            ch.Name = COLUMN_DATE;
+            ch.Text = Properties.Resources.COLUMN_DATE;
+            ch.Width = 100;
+            lvMain.Columns.Add(ch);
+
+            ch = new ColumnHeader();
+            ch.Name = COLUMN_EXTENTION;
+            ch.Text = Properties.Resources.COLUMN_EXTENTION;
+            ch.Width = 100;
+            lvMain.Columns.Add(ch);
+
+            ch = new ColumnHeader();
+            ch.Name = COLUMN_DURATION;
+            ch.Text = Properties.Resources.COLUMN_DURATION;
+            ch.Width = 100;
+            lvMain.Columns.Add(ch);
+
+            HashIni ini = Profile.ReadAll(IniPath);
+            
+            Profile.GetString("option", "ffmpeg", "", out ffmpeg_, ini);
+            AmbLib.LoadListViewColumnWidth(lvMain, SECTION_OPTION, KEY_COLUMN_WIDTH, ini);
         }
 
         private string getVideoLengthWork(string ins)
@@ -189,52 +239,42 @@ namespace ffjoin
 
         private string getffmpeg(bool reset)
         {
-            if (reset)
-                ffmpeg_ = null;
+            if (!reset)
+            {
+                if (File.Exists(ffmpeg_))
+                    return ffmpeg_;
 
-            if (File.Exists(ffmpeg_))
-                return ffmpeg_;
-
-            FileInfo fithis = new FileInfo(Application.ExecutablePath);
-            ffmpeg_ = fithis.Directory + "\\ffmpeg.exe";
-            if (File.Exists(ffmpeg_))
-                return ffmpeg_;
+                FileInfo fithis = new FileInfo(Application.ExecutablePath);
+                ffmpeg_ = fithis.Directory + "\\ffmpeg.exe";
+                if (File.Exists(ffmpeg_))
+                    return ffmpeg_;
+            }
 
             OpenFileDialog ofd = new OpenFileDialog();
 
-            //‚Í‚¶‚ß‚Ìƒtƒ@ƒCƒ‹–¼‚ğw’è‚·‚é
-            //‚Í‚¶‚ß‚Éuƒtƒ@ƒCƒ‹–¼v‚Å•\¦‚³‚ê‚é•¶š—ñ‚ğw’è‚·‚é
             ofd.FileName = "ffmpeg.exe";
 
-            //‚Í‚¶‚ß‚É•\¦‚³‚ê‚éƒtƒHƒ‹ƒ_‚ğw’è‚·‚é
-            //w’è‚µ‚È‚¢i‹ó‚Ì•¶š—ñj‚Ì‚ÍAŒ»İ‚ÌƒfƒBƒŒƒNƒgƒŠ‚ª•\¦‚³‚ê‚é
             // ofd.InitialDirectory = @"C:\";
             
-            //[ƒtƒ@ƒCƒ‹‚Ìí—Ş]‚É•\¦‚³‚ê‚é‘I‘ğˆ‚ğw’è‚·‚é
-            //w’è‚µ‚È‚¢‚Æ‚·‚×‚Ä‚Ìƒtƒ@ƒCƒ‹‚ª•\¦‚³‚ê‚é
             ofd.Filter = "Executable (*.exe)|*.exe";
             
-            //[ƒtƒ@ƒCƒ‹‚Ìí—Ş]‚Å‚Í‚¶‚ß‚É
-            //u‚·‚×‚Ä‚Ìƒtƒ@ƒCƒ‹v‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚é‚æ‚¤‚É‚·‚é
-            ofd.FilterIndex = 1;
+            // ofd.FilterIndex = 1;
             
-            //ƒ^ƒCƒgƒ‹‚ğİ’è‚·‚é
             ofd.Title = Properties.Resources.S_CHOOSE_FFMPEG;
 
-            //ƒ_ƒCƒAƒƒOƒ{ƒbƒNƒX‚ğ•Â‚¶‚é‘O‚ÉŒ»İ‚ÌƒfƒBƒŒƒNƒgƒŠ‚ğ•œŒ³‚·‚é‚æ‚¤‚É‚·‚é
             // ofd.RestoreDirectory = true;
 
-            //‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚Ì–¼‘O‚ªw’è‚³‚ê‚½‚Æ‚«Œx‚ğ•\¦‚·‚é
-            //ƒfƒtƒHƒ‹ƒg‚ÅTrue‚È‚Ì‚Åw’è‚·‚é•K—v‚Í‚È‚¢
             ofd.CheckFileExists = true;
             
-            //‘¶İ‚µ‚È‚¢ƒpƒX‚ªw’è‚³‚ê‚½‚Æ‚«Œx‚ğ•\¦‚·‚é
-            //ƒfƒtƒHƒ‹ƒg‚ÅTrue‚È‚Ì‚Åw’è‚·‚é•K—v‚Í‚È‚¢
             ofd.CheckPathExists = true;
 
-            //ƒ_ƒCƒAƒƒO‚ğ•\¦‚·‚é
             if (ofd.ShowDialog() != DialogResult.OK)
             {
+                if (reset)
+                {
+                    // want to reset but cancel.
+                    return ffmpeg_;
+                }
                 return "";
             }
             ffmpeg_ = ofd.FileName;
@@ -422,8 +462,12 @@ namespace ffjoin
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
         {
             bool failed = false;
-            failed |= !Ambiesoft.Profile.WriteString("option", "ffmpeg", ffmpeg_, inipath_);
 
+            HashIni ini = Profile.ReadAll(IniPath);
+
+            failed |= !Ambiesoft.Profile.WriteString("option", "ffmpeg", ffmpeg_, ini);
+            failed |= !AmbLib.SaveListViewColumnWidth(lvMain, SECTION_OPTION, KEY_COLUMN_WIDTH, ini);
+            failed |= !Profile.WriteAll(ini, IniPath);
             if (failed)
             {
                 Ambiesoft.CenteredMessageBox.Show(this,
@@ -577,6 +621,9 @@ namespace ffjoin
             if (_itemDnD == null)
                 return;
 
+            // drag begines
+            lvMain.ListViewItemSorter = null;
+
             // Show the user that a drag operation is happening
             Cursor = Cursors.Hand;
 
@@ -674,20 +721,20 @@ namespace ffjoin
         private int _column;
         private bool _reverse;
         /// <summary>
-        /// ListViewItemComparerƒNƒ‰ƒX‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^
+        /// ListViewItemComparerã‚¯ãƒ©ã‚¹ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
         /// </summary>
-        /// <param name="col">•À‚Ñ‘Ö‚¦‚é—ñ”Ô†</param>
+        /// <param name="col">ä¸¦ã³æ›¿ãˆã‚‹åˆ—ç•ªå·</param>
         public ListViewItemComparer(int col, bool reverse)
         {
             _column = col;
             _reverse = reverse;
         }
 
-        //x‚ªy‚æ‚è¬‚³‚¢‚Æ‚«‚Íƒ}ƒCƒiƒX‚Ì”A‘å‚«‚¢‚Æ‚«‚Íƒvƒ‰ƒX‚Ì”A
-        //“¯‚¶‚Æ‚«‚Í0‚ğ•Ô‚·
+        //xãŒyã‚ˆã‚Šå°ã•ã„ã¨ãã¯ãƒã‚¤ãƒŠã‚¹ã®æ•°ã€å¤§ãã„ã¨ãã¯ãƒ—ãƒ©ã‚¹ã®æ•°ã€
+        //åŒã˜ã¨ãã¯0ã‚’è¿”ã™
         public int Compare(object x, object y)
         {
-            //ListViewItem‚Ìæ“¾
+            //ListViewItemã®å–å¾—
             ListViewItem itemx = (ListViewItem)x;
             ListViewItem itemy = (ListViewItem)y;
 

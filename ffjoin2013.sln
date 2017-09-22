@@ -5,16 +5,28 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ffjoin2013", "ffjoin\ffjoin2013.csproj", "{4F8F0163-44DA-425D-AA3F-6E30D213B343}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zzzDist", "zzzDist\zzzDist.csproj", "{1CDE3119-826C-41F5-AA06-508B8CE0A5F0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4F8F0163-44DA-425D-AA3F-6E30D213B343} = {4F8F0163-44DA-425D-AA3F-6E30D213B343}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		zzzDist|Any CPU = zzzDist|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{4F8F0163-44DA-425D-AA3F-6E30D213B343}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4F8F0163-44DA-425D-AA3F-6E30D213B343}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F8F0163-44DA-425D-AA3F-6E30D213B343}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F8F0163-44DA-425D-AA3F-6E30D213B343}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F8F0163-44DA-425D-AA3F-6E30D213B343}.zzzDist|Any CPU.ActiveCfg = Release|Any CPU
+		{4F8F0163-44DA-425D-AA3F-6E30D213B343}.zzzDist|Any CPU.Build.0 = Release|Any CPU
+		{1CDE3119-826C-41F5-AA06-508B8CE0A5F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CDE3119-826C-41F5-AA06-508B8CE0A5F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CDE3119-826C-41F5-AA06-508B8CE0A5F0}.zzzDist|Any CPU.ActiveCfg = Release|Any CPU
+		{1CDE3119-826C-41F5-AA06-508B8CE0A5F0}.zzzDist|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

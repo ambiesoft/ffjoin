@@ -1,7 +1,10 @@
 {
 	"name": "ffjoin",
 	"solution": "ffjoin2013.sln",
-	"configuration": "Release",
+	
+	"targetproject": "zzzDist",
+	"configuration": "zzzDist",
+		
     "targets": [
             {
                 "outdir" : "C:/Linkout/ffjoin/",
@@ -10,8 +13,9 @@
     ],
     "archivedir": "C:/Linkout/",
     "remotedir": "http://ambiesoft.fam.cx/ffdav/uploads/ffjoin/",
+    "remotesha1" : "http://ambiesoft.fam.cx/ffdav/uploads/getSha1.php?file=ffjoin/{}",
     
-    "TotalFileCount": 7,
+    "TotalFileCount": 10,
     
    
     "obtainverfrom": "history.txt",
