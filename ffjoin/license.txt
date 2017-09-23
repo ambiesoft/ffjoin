@@ -1,4 +1,4 @@
-﻿ListViewEx.cs
+﻿ListViewEx.cs (https://www.codeproject.com/Articles/14487/Manual-reordering-of-items-inside-a-ListView)
 -------------
 
 Microsoft Public License (MS-PL)
