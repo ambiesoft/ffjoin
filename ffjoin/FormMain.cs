@@ -325,7 +325,9 @@ namespace ffjoin
                 {
                     if (string.Compare(ext, fi.Extension, true) != 0)
                     {
-                        Ambiesoft.CenteredMessageBox.Show(this, Properties.Resources.S_DIFFERENT_EXTENSION);
+                        CppUtils.CenteredMessageBox(
+                            this,
+                            Properties.Resources.S_DIFFERENT_EXTENSION);
                         return;
                     }
                 }
@@ -431,7 +433,7 @@ namespace ffjoin
             p.WaitForExit();
             string prevsum = getSum().ToString().TrimEnd('0');
             string resultsum = getVideoLength(outfile);
-            Ambiesoft.CenteredMessageBox.Show(this,
+            CppUtils.CenteredMessageBox(this,
                 "prev sum duration =\t" + prevsum + "\r\n" + "result duration =\t\t" + resultsum,
                 Application.ProductName,
                 MessageBoxButtons.OK,
@@ -470,7 +472,7 @@ namespace ffjoin
             failed |= !Profile.WriteAll(ini, IniPath);
             if (failed)
             {
-                Ambiesoft.CenteredMessageBox.Show(this,
+                CppUtils.CenteredMessageBox(this,
                     Properties.Resources.S_INISAVE_FAILED,
                     Application.ProductName,
                     MessageBoxButtons.OK,
@@ -583,7 +585,7 @@ namespace ffjoin
             
             string prevsum = getSum().ToString().TrimEnd('0');
             string resultsum = getVideoLength(outfile);
-            Ambiesoft.CenteredMessageBox.Show(this,
+            CppUtils.CenteredMessageBox(this,
                 "prev sum duration =\t" + prevsum + "\r\n" + "result duration =\t\t" + resultsum,
                 Application.ProductName,
                 MessageBoxButtons.OK,

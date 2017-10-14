@@ -46,11 +46,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(SolutionDir)ffjoin\Readme.txt" "$(TargetDir)"
+    <PostBuildEvent>
 copy "$(SolutionDir)ffjoin\history.txt" "$(TargetDir)"
-copy "$(SolutionDir)ffjoin\license.txt" "$(TargetDir)"
+copy "$(SolutionDir)ffjoin\Copying.txt" "$(TargetDir)"
 
-copy "$(ProjectDir)v2v4.exe.config" "$(TargetDir)ffjoin.exe.config"
+
+
+
 
 del "$(TargetDir)zzzDist.*"
 echo "OK"</PostBuildEvent>

@@ -15,9 +15,19 @@
     "remotedir": "http://ambiesoft.fam.cx/ffdav/uploads/ffjoin/",
     "remotesha1" : "http://ambiesoft.fam.cx/ffdav/uploads/getSha1.php?file=ffjoin/{}",
     
-    "TotalFileCount": 10,
+    "TotalFileCount": 12,
     
-   
+    "ShouldNotBeFiles": [
+    	"Ambiesoft.AmbLibcpp.x86.dll"
+    ],
+    
+    "ShouldBeFiles": [
+    	"platform/Ambiesoft.AmbLibcpp.x86.dll",
+    	"platform/Ambiesoft.AmbLibcpp.x64.dll"
+    ],
+    
+    "ShouldBeOneOfThem": [],
+
     "obtainverfrom": "history.txt",
     "obtainverregex": "\\d+\\.\\d+"
 }
