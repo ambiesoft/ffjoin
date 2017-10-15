@@ -2,7 +2,7 @@
 using System.Text;
 using System.Windows.Forms;
 using System.Reflection;
-
+using Ambiesoft;
 namespace ffjoin
 {
     public partial class FormMain : Form
@@ -20,7 +20,8 @@ namespace ffjoin
 
         void Info(string message)
         {
-            MessageBox.Show(message,
+            CppUtils.CenteredMessageBox(this,
+                message,
                 Application.ProductName,
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
