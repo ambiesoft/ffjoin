@@ -107,8 +107,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>mkdir "$(TargetDir)platform"
-copy "C:\Linkout\DNAssembly.NET4\Ambiesoft.AmbLibcpp.*" "$(TargetDir)platform\"
+    <PostBuildEvent>REM mkdir "$(TargetDir)platform"
+REM copy "C:\Linkout\DNAssembly.NET4\Ambiesoft.AmbLibcpp.*" "$(TargetDir)platform\"
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

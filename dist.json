@@ -15,15 +15,15 @@
     "remotedir": "http://ambiesoft.fam.cx/ffdav/uploads/ffjoin/",
     "remotesha1" : "http://ambiesoft.fam.cx/ffdav/uploads/getSha1.php?file=ffjoin/{}",
     
-    "TotalFileCount": 12,
+    "TotalFileCount": 10,
     
     "ShouldNotBeFiles": [
-    	"Ambiesoft.AmbLibcpp.x86.dll"
+    	
     ],
     
     "ShouldBeFiles": [
-    	"platform/Ambiesoft.AmbLibcpp.x86.dll",
-    	"platform/Ambiesoft.AmbLibcpp.x64.dll"
+		"Ambiesoft.AmbLibcpp.dll",
+		"Ambiesoft.AmbLib.dll"
     ],
     
     "ShouldBeOneOfThem": [],
