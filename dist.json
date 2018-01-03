@@ -15,10 +15,10 @@
     "remotedir": "http://ambiesoft.fam.cx/ffdav/uploads/ffjoin/",
     "remotesha1" : "http://ambiesoft.fam.cx/ffdav/uploads/getSha1.php?file=ffjoin/{}",
     
-    "TotalFileCount": 10,
+    "TotalFileCount": 11,
     
     "ShouldNotBeFiles": [
-    	
+    	"ffjoin.ini"
     ],
     
     "ShouldBeFiles": [
