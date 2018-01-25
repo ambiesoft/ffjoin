@@ -408,6 +408,10 @@ namespace ffjoin
                     return;
 
                 outfile = sfd.FileName;
+                if (Path.GetExtension(outfile).ToLower() != ("." + extwithout))
+                {
+                    outfile += "." + extwithout;
+                }
             }
 
             // FileInfo fithis = new FileInfo(Application.ExecutablePath);
@@ -431,13 +435,33 @@ namespace ffjoin
 
             Process p = Process.Start(psi);
             p.WaitForExit();
+
+            CppUtils.OpenFolder(this, outfile);
+
             string prevsum = getSum().ToString().TrimEnd('0');
             string resultsum = getVideoLength(outfile);
-            CppUtils.CenteredMessageBox(this,
-                "prev sum duration =\t" + prevsum + "\r\n" + "result duration =\t\t" + resultsum,
+
+            StringBuilder sbMessage = new StringBuilder();
+            
+            sbMessage.AppendLine(string.Format(
+                "{0}:\t\t{1}",
+                Properties.Resources.S_DURATION_OF_INPUTFILES,
+                prevsum));
+             sbMessage.AppendLine(string.Format(
+                 "{0}:\t\t{1}",
+                 Properties.Resources.S_DURATION_OUTPUT,
+                 resultsum));
+
+            sbMessage.AppendLine();
+            sbMessage.AppendLine(Properties.Resources.S_DO_YOU_WANT_TO_OPEN_CREATED_VIDEO);
+            if(DialogResult.Yes == CppUtils.CenteredMessageBox(this,
+                sbMessage.ToString(),
                 Application.ProductName,
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Information))
+            {
+                Process.Start(outfile);
+            }
             File.Delete(tempfile);
         }
 
