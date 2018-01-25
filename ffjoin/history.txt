@@ -1,4 +1,6 @@
-﻿2018/01/04 Ver1.3use new lib
+﻿2018/01/26 Ver1.4
+2018/01/04 Ver1.3
+use new lib
 
 2017/10/14 Ver1.2
 to .NET 4
