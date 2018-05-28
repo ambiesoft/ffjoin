@@ -9,6 +9,10 @@ namespace ffjoin
         private void FormMain_Load(object sender, EventArgs e)
         {
             getffmpeg();
+            if(inputVideos_.Count != 0)
+            {
+                AddVideos(inputVideos_.ToArray());
+            }
             UpdateTitle();
         }
     }

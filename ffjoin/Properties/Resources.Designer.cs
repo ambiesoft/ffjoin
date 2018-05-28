@@ -142,6 +142,15 @@ namespace ffjoin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} does not exist..
+        /// </summary>
+        internal static string S_FILE_NOT_EXISTS {
+            get {
+                return ResourceManager.GetString("S_FILE_NOT_EXISTS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to save to ini.
         /// </summary>
         internal static string S_INISAVE_FAILED {

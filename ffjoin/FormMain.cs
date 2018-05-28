@@ -26,6 +26,7 @@ namespace ffjoin
         const string COLUMN_EXTENTION = "Extention";
         const string COLUMN_DURATION = "Duration";
 
+        readonly List<string> inputVideos_ = new List<string>();
         string IniPath
         {
             get
@@ -35,8 +36,10 @@ namespace ffjoin
                 return Path.Combine(inipath, Application.ProductName + ".ini");
             }
         }
-        public FormMain()
+        public FormMain(List<string> inputVideos)
         {
+            inputVideos_ = inputVideos;
+
             InitializeComponent();
 
             ColumnHeader ch = null;
@@ -168,23 +171,27 @@ namespace ffjoin
 
             return getVideoLengthWork(error);
         }
+        void AddVideos(string[] videoFiles)
+        {
+            foreach (string s in videoFiles)
+            {
+                FileInfo fi = new FileInfo(s);
+                ListViewItem item = new ListViewItem();
+                item.Text = s;
+                item.SubItems.Add(fi.LastAccessTime.ToString());
+                item.SubItems.Add(fi.Extension);
+                item.SubItems.Add(getVideoLength(s));
+                item.Tag = fi;
+                lvMain.Items.Add(item);
+            }
+            calcSum();
+        }
         private void lvMain_DragDrop(object sender, DragEventArgs e)
         {
             if(e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                string[] fileName = (string[])e.Data.GetData(DataFormats.FileDrop, true);
-                foreach (string s in fileName)
-                {
-                    FileInfo fi = new FileInfo(s);
-                    ListViewItem item = new ListViewItem();
-                    item.Text = s;
-                    item.SubItems.Add(fi.LastAccessTime.ToString());
-                    item.SubItems.Add(fi.Extension);
-                    item.SubItems.Add(getVideoLength(s));
-                    item.Tag = fi;
-                    lvMain.Items.Add(item);
-                }
-                calcSum();
+                string[] fileNames = (string[])e.Data.GetData(DataFormats.FileDrop, true);
+                AddVideos(fileNames);
             }
         }
 
