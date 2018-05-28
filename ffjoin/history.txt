@@ -1,4 +1,8 @@
-﻿2018/01/26 Ver1.4
+﻿2018/05/29 Ver1.5
+save size and position of main form
+accept command line for files
+
+2018/01/26 Ver1.4
 2018/01/04 Ver1.3
 use new lib
 

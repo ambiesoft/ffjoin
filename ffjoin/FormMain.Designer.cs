@@ -43,18 +43,13 @@
             // lvMain
             // 
             this.lvMain.AllowDrop = true;
-            this.lvMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.lvMain, "lvMain");
             this.lvMain.FullRowSelect = true;
             this.lvMain.HideSelection = false;
             this.lvMain.LineAfter = -1;
             this.lvMain.LineBefore = -1;
-            this.lvMain.Location = new System.Drawing.Point(12, 13);
             this.lvMain.MultiSelect = false;
             this.lvMain.Name = "lvMain";
-            this.lvMain.Size = new System.Drawing.Size(633, 334);
-            this.lvMain.TabIndex = 0;
             this.lvMain.UseCompatibleStateImageBehavior = false;
             this.lvMain.View = System.Windows.Forms.View.Details;
             this.lvMain.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvMain_ColumnClick);
@@ -67,96 +62,63 @@
             // 
             // btnJoin
             // 
-            this.btnJoin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnJoin.Location = new System.Drawing.Point(12, 353);
+            resources.ApplyResources(this.btnJoin, "btnJoin");
             this.btnJoin.Name = "btnJoin";
-            this.btnJoin.Size = new System.Drawing.Size(313, 25);
-            this.btnJoin.TabIndex = 6;
-            this.btnJoin.Text = "&Join Normal";
             this.btnJoin.UseVisualStyleBackColor = true;
             this.btnJoin.Click += new System.EventHandler(this.btnJoin_Click);
             // 
             // btnOK
             // 
-            this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.btnOK, "btnOK");
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(654, 353);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(92, 25);
-            this.btnOK.TabIndex = 8;
-            this.btnOK.Text = "&Close";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
             // btnClear
             // 
-            this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new System.Drawing.Point(651, 11);
+            resources.ApplyResources(this.btnClear, "btnClear");
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(92, 25);
-            this.btnClear.TabIndex = 1;
-            this.btnClear.Text = "&Clear";
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
             // btnSetffmpeg
             // 
-            this.btnSetffmpeg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSetffmpeg.Location = new System.Drawing.Point(651, 219);
+            resources.ApplyResources(this.btnSetffmpeg, "btnSetffmpeg");
             this.btnSetffmpeg.Name = "btnSetffmpeg";
-            this.btnSetffmpeg.Size = new System.Drawing.Size(92, 25);
-            this.btnSetffmpeg.TabIndex = 2;
-            this.btnSetffmpeg.Text = "set &ffmpeg";
             this.btnSetffmpeg.UseVisualStyleBackColor = true;
             this.btnSetffmpeg.Click += new System.EventHandler(this.btnSetffmpeg_Click);
             // 
             // txtAllduration
             // 
-            this.txtAllduration.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtAllduration.Location = new System.Drawing.Point(651, 277);
+            resources.ApplyResources(this.txtAllduration, "txtAllduration");
             this.txtAllduration.Name = "txtAllduration";
             this.txtAllduration.ReadOnly = true;
-            this.txtAllduration.Size = new System.Drawing.Size(92, 20);
-            this.txtAllduration.TabIndex = 4;
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(651, 260);
+            resources.ApplyResources(this.label1, "label1");
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(45, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "&duration";
             // 
             // btnJoinDifferent
             // 
-            this.btnJoinDifferent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnJoinDifferent.Location = new System.Drawing.Point(332, 353);
+            resources.ApplyResources(this.btnJoinDifferent, "btnJoinDifferent");
             this.btnJoinDifferent.Name = "btnJoinDifferent";
-            this.btnJoinDifferent.Size = new System.Drawing.Size(313, 25);
-            this.btnJoinDifferent.TabIndex = 7;
-            this.btnJoinDifferent.Text = "&Join Different Codec";
             this.btnJoinDifferent.UseVisualStyleBackColor = true;
             this.btnJoinDifferent.Click += new System.EventHandler(this.btnJoinDifferent_Click);
             // 
             // btnAbout
             // 
-            this.btnAbout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAbout.Location = new System.Drawing.Point(651, 310);
+            resources.ApplyResources(this.btnAbout, "btnAbout");
             this.btnAbout.Name = "btnAbout";
-            this.btnAbout.Size = new System.Drawing.Size(92, 25);
-            this.btnAbout.TabIndex = 5;
-            this.btnAbout.Text = "&About";
             this.btnAbout.UseVisualStyleBackColor = true;
             this.btnAbout.Click += new System.EventHandler(this.btnAbout_Click);
             // 
             // FormMain
             // 
             this.AcceptButton = this.btnOK;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(754, 390);
             this.Controls.Add(this.btnAbout);
             this.Controls.Add(this.btnJoin);
             this.Controls.Add(this.btnJoinDifferent);
@@ -166,11 +128,8 @@
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.lvMain);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(762, 423);
             this.Name = "FormMain";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
-            this.Text = "ffjoin";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMain_FormClosed);
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.ResumeLayout(false);

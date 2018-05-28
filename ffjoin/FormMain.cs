@@ -42,6 +42,10 @@ namespace ffjoin
 
             InitializeComponent();
 
+            HashIni ini = Profile.ReadAll(IniPath);
+
+            AmbLib.LoadFormXYWH(this, SECTION_OPTION, ini);
+
             ColumnHeader ch = null;
 
             ch = new ColumnHeader();
@@ -68,7 +72,7 @@ namespace ffjoin
             ch.Width = 100;
             lvMain.Columns.Add(ch);
 
-            HashIni ini = Profile.ReadAll(IniPath);
+            
             
             Profile.GetString("option", "ffmpeg", "", out ffmpeg_, ini);
             AmbLib.LoadListViewColumnWidth(lvMain, SECTION_OPTION, KEY_COLUMN_WIDTH, ini);
@@ -500,6 +504,7 @@ namespace ffjoin
 
             failed |= !Ambiesoft.Profile.WriteString("option", "ffmpeg", ffmpeg_, ini);
             failed |= !AmbLib.SaveListViewColumnWidth(lvMain, SECTION_OPTION, KEY_COLUMN_WIDTH, ini);
+            failed |= !AmbLib.SaveFormXYWH(this, SECTION_OPTION, ini);
             failed |= !Profile.WriteAll(ini, IniPath);
             if (failed)
             {
