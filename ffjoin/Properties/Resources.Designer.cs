@@ -124,6 +124,15 @@ namespace ffjoin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to trash these {0} original fiiles?.
+        /// </summary>
+        internal static string S_DO_YOU_WANT_TO_TRASH_FOLLOWING_N_ORIGINAL_FILES {
+            get {
+                return ResourceManager.GetString("S_DO_YOU_WANT_TO_TRASH_FOLLOWING_N_ORIGINAL_FILES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Duration of input video files.
         /// </summary>
         internal static string S_DURATION_OF_INPUTFILES {
@@ -142,7 +151,7 @@ namespace ffjoin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} does not exist..
+        ///   Looks up a localized string similar to &quot;{0}&quot; does not exist..
         /// </summary>
         internal static string S_FILE_NOT_EXISTS {
             get {
@@ -156,6 +165,15 @@ namespace ffjoin.Properties {
         internal static string S_INISAVE_FAILED {
             get {
                 return ResourceManager.GetString("S_INISAVE_FAILED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Joining failed. (ExitCode = {0}).
+        /// </summary>
+        internal static string S_JOIN_FAILED {
+            get {
+                return ResourceManager.GetString("S_JOIN_FAILED", resourceCulture);
             }
         }
         

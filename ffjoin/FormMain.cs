@@ -325,6 +325,17 @@ namespace ffjoin
                 return;
             }
 
+            // check file exists
+            foreach (ListViewItem item in lvMain.Items)
+            {
+                if(!File.Exists(item.Text))
+                {
+                    CppUtils.Alert(this,
+                        string.Format(Properties.Resources.S_FILE_NOT_EXISTS, item.Text));
+                    return;
+                }
+            }
+
             string ext=null;
             foreach (ListViewItem item in lvMain.Items)
             {
@@ -446,6 +457,12 @@ namespace ffjoin
 
             Process p = Process.Start(psi);
             p.WaitForExit();
+            if(p.ExitCode != 0)
+            {
+                CppUtils.Alert(this,
+                    string.Format(Properties.Resources.S_JOIN_FAILED, p.ExitCode));
+                return;
+            }
 
             CppUtils.OpenFolder(this, outfile);
 
@@ -469,10 +486,38 @@ namespace ffjoin
                 sbMessage.ToString(),
                 Application.ProductName,
                 MessageBoxButtons.YesNo,
-                MessageBoxIcon.Information))
+                MessageBoxIcon.Question))
             {
                 Process.Start(outfile);
             }
+
+            //
+            // deleting original files
+            //
+            List<string> filesToDel = new List<string>();
+            foreach (ListViewItem item in lvMain.Items)
+            {
+                filesToDel.Add(item.Text);
+            }
+
+            StringBuilder sbDeleteMessage = new StringBuilder();
+            sbDeleteMessage.AppendLine(string.Format(Properties.Resources.S_DO_YOU_WANT_TO_TRASH_FOLLOWING_N_ORIGINAL_FILES,filesToDel.Count));
+            sbDeleteMessage.AppendLine();
+            foreach(string file in filesToDel)
+            {
+                sbDeleteMessage.AppendLine(file);
+            }
+            if(DialogResult.Yes == CppUtils.CenteredMessageBox(this,
+                sbDeleteMessage.ToString(),
+                Application.ProductName,
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question,
+                MessageBoxDefaultButton.Button2))
+            {
+                CppUtils.DeleteFiles(this, filesToDel.ToArray());
+            }
+
+            // deleting temp file
             File.Delete(tempfile);
         }
 

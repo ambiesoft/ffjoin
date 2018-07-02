@@ -11,9 +11,13 @@ namespace ffjoin
         {
             StringBuilder sb=new StringBuilder();
             sb.Append(Application.ProductName).Append(" ver ");
-            sb.Append(Assembly.GetExecutingAssembly().GetName().Version.Major.ToString());
-            sb.Append(".");
-            sb.Append(Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString());
+            sb.Append(AmbLib.getAssemblyVersion(Assembly.GetExecutingAssembly(), 3));
+
+            //sb.Append(Assembly.GetExecutingAssembly().GetName().Version.Major.ToString());
+            //sb.Append(".");
+            //sb.Append(Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString());
+            //sb.Append(".");
+            //sb.Append(Assembly.GetExecutingAssembly().GetName().Version.Build.ToString());
 
             Info(sb.ToString());
         }

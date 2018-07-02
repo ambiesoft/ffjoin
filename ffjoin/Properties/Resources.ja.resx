@@ -138,6 +138,9 @@
   <data name="S_DO_YOU_WANT_TO_OPEN_CREATED_VIDEO" xml:space="preserve">
     <value>作成された動画を開きますか？</value>
   </data>
+  <data name="S_DO_YOU_WANT_TO_TRASH_FOLLOWING_N_ORIGINAL_FILES" xml:space="preserve">
+    <value>以下の {0} 個のオリジナルのファイルをごみ箱に移動しますか？</value>
+  </data>
   <data name="S_DURATION_OF_INPUTFILES" xml:space="preserve">
     <value>入力動画の再生時間</value>
   </data>
@@ -145,10 +148,13 @@
     <value>出力動画の再生時間</value>
   </data>
   <data name="S_FILE_NOT_EXISTS" xml:space="preserve">
-    <value>{0} は存在しません。</value>
+    <value>"{0}" は存在しません。</value>
   </data>
   <data name="S_INISAVE_FAILED" xml:space="preserve">
     <value>ini の保存に失敗しました。</value>
+  </data>
+  <data name="S_JOIN_FAILED" xml:space="preserve">
+    <value>結合に失敗しました。(ExitCode = {0})</value>
   </data>
   <data name="S_LESSTHAN_TWO_ITEMS" xml:space="preserve">
     <value>結合には少なくとも2つのファイルが必要です。</value>
