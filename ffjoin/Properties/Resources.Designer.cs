@@ -106,6 +106,15 @@ namespace ffjoin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The list has only one item. Do you want to continue?.
+        /// </summary>
+        internal static string S_CONFIRM_JOIN_ONEITEM {
+            get {
+                return ResourceManager.GetString("S_CONFIRM_JOIN_ONEITEM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File extensions are different..
         /// </summary>
         internal static string S_DIFFERENT_EXTENSION {
@@ -178,11 +187,11 @@ namespace ffjoin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It needs at least two files to join..
+        ///   Looks up a localized string similar to No items in the list..
         /// </summary>
-        internal static string S_LESSTHAN_TWO_ITEMS {
+        internal static string S_NO_ITEMS {
             get {
-                return ResourceManager.GetString("S_LESSTHAN_TWO_ITEMS", resourceCulture);
+                return ResourceManager.GetString("S_NO_ITEMS", resourceCulture);
             }
         }
     }

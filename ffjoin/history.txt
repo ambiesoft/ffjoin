@@ -1,4 +1,7 @@
-﻿2018/07/02 Ver1.0.6
+﻿2019/04/09 Ver1.0.7
+Use same function for both join methods
+
+2018/07/02 Ver1.0.6
 Trash original files after joining if user wants.
 
 2018/05/29 Ver1.5

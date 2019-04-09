@@ -309,26 +309,31 @@ namespace ffjoin
             this.Text = sb.ToString();
         }
             
-        void Alert(string message)
-        {
-            MessageBox.Show(message,
-                Application.ProductName,
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Exclamation);
-        }
 
         private void btnJoin_Click(object sender, EventArgs e)
         {
+            doJoinCommon(false);
+        }
+        private void doJoinCommon(bool bReEncode)
+        {
+            if (lvMain.Items.Count < 1)
+            {
+                CppUtils.Alert(Properties.Resources.S_NO_ITEMS);
+                return;
+            }
+
             if (lvMain.Items.Count < 2)
             {
-                Alert(Properties.Resources.S_LESSTHAN_TWO_ITEMS);
-                return;
+                if (DialogResult.Yes != CppUtils.YesOrNo(Properties.Resources.S_CONFIRM_JOIN_ONEITEM))
+                {
+                    return;
+                }
             }
 
             // check file exists
             foreach (ListViewItem item in lvMain.Items)
             {
-                if(!File.Exists(item.Text))
+                if (!File.Exists(item.Text))
                 {
                     CppUtils.Alert(this,
                         string.Format(Properties.Resources.S_FILE_NOT_EXISTS, item.Text));
@@ -336,7 +341,8 @@ namespace ffjoin
                 }
             }
 
-            string ext=null;
+            string ext = null;
+            string extwithout = null;
             foreach (ListViewItem item in lvMain.Items)
             {
                 string file = item.Text;
@@ -345,15 +351,20 @@ namespace ffjoin
                     ext = fi.Extension;
                 else
                 {
-                    if (string.Compare(ext, fi.Extension, true) != 0)
+                    // check if extention is same.
+                    if (!bReEncode)
                     {
-                        CppUtils.CenteredMessageBox(
-                            this,
-                            Properties.Resources.S_DIFFERENT_EXTENSION);
-                        return;
+                        if (string.Compare(ext, fi.Extension, true) != 0)
+                        {
+                            CppUtils.CenteredMessageBox(
+                                this,
+                                Properties.Resources.S_DIFFERENT_EXTENSION);
+                            return;
+                        }
                     }
                 }
             }
+            extwithout = ext.TrimStart('.');
 
             string outfilename = null;
             foreach (ListViewItem item in lvMain.Items)
@@ -401,124 +412,194 @@ namespace ffjoin
 
 
 
-            string tempfile = Path.GetTempFileName();
-            using (TextWriter writer = File.CreateText(tempfile))
+            HashSet<string> exts = new HashSet<string>();
+            if (!bReEncode)
             {
-                foreach (ListViewItem item in lvMain.Items)
-                {
-                    writer.Write(@"file '");
-                    writer.Write(item.Text);
-                    writer.Write(@"'");
-                    writer.WriteLine();
-                }
+                exts.Add(extwithout);
             }
-
-            string extwithout=ext.TrimStart('.');
-            string outfile=null;
-            using(SaveFileDialog sfd = new SaveFileDialog())
+            else
+            {
+                exts.Add(extwithout);
+                exts.Add("mp4");
+                exts.Add("avi");
+            }
+            //string extwithout = ext.TrimStart('.');
+            //string[] availableext = { "mp4", "avi" };
+            string outfile = null;
+            using (SaveFileDialog sfd = new SaveFileDialog())
             {
                 sfd.FileName = outfilename;
-                string filter = extwithout + "File ";
-                filter += "(*.";
-                filter += extwithout;
-                filter += ")|*.";
-                filter += extwithout;
-                filter += "|All File(*.*)|*.*";
-                sfd.Filter=filter;
+                //string filter = extwithout + "File ";
+                //filter += "(*.";
+                //filter += extwithout;
+                //filter += ")|*.";
+                //filter += extwithout;
+                //filter += "|All File(*.*)|*.*";
+                //sfd.Filter=filter;
+
+                StringBuilder sbFilter = new StringBuilder();
+                foreach (string ae in exts)
+                {
+                    sbFilter.Append(ae);
+                    sbFilter.Append("File ");
+                    sbFilter.Append("(*.");
+
+
+                    sbFilter.Append(ae);
+                    sbFilter.Append(")|*.");
+                    sbFilter.Append(ae);
+                    sbFilter.Append("|");
+                }
+                sbFilter.Append("All File(*.*)|*.*");
+                sfd.Filter = sbFilter.ToString();
+
                 sfd.InitialDirectory = initDir;
-                if(DialogResult.OK != sfd.ShowDialog(this))
+                if (DialogResult.OK != sfd.ShowDialog(this))
                     return;
 
                 outfile = sfd.FileName;
-                if (Path.GetExtension(outfile).ToLower() != ("." + extwithout))
+
+                // if extention is empty
+                //string outfileext = Path.GetExtension(outfile).TrimStart('.').ToLower();
+                //if (outfileext != extwithout)
+                //{
+                //    outfile += "." + extwithout;
+                //}
+            }
+
+
+            // Create tmp file for ffmpeg argument
+            string tempfile = string.Empty;
+            if (!bReEncode)
+            {
+                tempfile = Path.GetTempFileName();
+                using (TextWriter writer = File.CreateText(tempfile))
                 {
-                    outfile += "." + extwithout;
+                    foreach (ListViewItem item in lvMain.Items)
+                    {
+                        writer.Write(@"file '");
+                        writer.Write(item.Text);
+                        writer.Write(@"'");
+                        writer.WriteLine();
+                    }
                 }
             }
 
-            // FileInfo fithis = new FileInfo(Application.ExecutablePath);
-            string ffmpeg = getffmpeg();
-            string argument = "-safe 0 -f concat -i \"";
-
-            argument += tempfile;
-            argument += "\"";
-            argument += " -c copy \"";
-            argument += outfile;
-            argument += "\"";
-            
-
-            ProcessStartInfo psi = new ProcessStartInfo();
-            psi.FileName = ffmpeg;
-            psi.Arguments = argument;
-            psi.RedirectStandardOutput = false;
-            psi.RedirectStandardError = false;
-            psi.UseShellExecute = false;
-            psi.CreateNoWindow = false;
-
-            Process p = Process.Start(psi);
-            p.WaitForExit();
-            if(p.ExitCode != 0)
+            try
             {
-                CppUtils.Alert(this,
-                    string.Format(Properties.Resources.S_JOIN_FAILED, p.ExitCode));
-                return;
+                string ffmpeg = getffmpeg();
+
+                string argument = string.Empty;
+                if (!bReEncode)
+                {
+                    argument += "-safe 0 -f concat -i \"";
+
+                    argument += tempfile;
+                    argument += "\"";
+                    argument += " -c copy \"";
+                    argument += outfile;
+                    argument += "\"";
+
+                    // argument =
+                    // -safe 0 -f concat -i "C:\Users\bjdTfeRf\AppData\Local\Temp\tmpEE1.tmp" -c copy "C:\Users\bjdTfeRf\Desktop\yyy\111.mp4"
+                }
+                else
+                {
+                    foreach (ListViewItem item in lvMain.Items)
+                    {
+                        argument += "-i \"" + item.Text + "\" ";
+                    }
+
+                    argument += "-filter_complex \"";
+                    string tmp = "";
+                    for (int i = 0; i < lvMain.Items.Count; ++i)
+                    {
+                        tmp += string.Format("[{0}:v:0] [{1}:a:0] ", i, i);
+                    }
+                    argument += tmp;
+
+                    argument += string.Format("concat=n={0}:v=1:a=1 [v] [a]\" ", lvMain.Items.Count);
+                    argument += "-map \"[v]\" -map \"[a]\" ";
+                    argument += "\"" + outfile + "\"";
+                }
+
+
+                ProcessStartInfo psi = new ProcessStartInfo();
+                psi.FileName = ffmpeg;
+                psi.Arguments = argument;
+                psi.RedirectStandardOutput = false;
+                psi.RedirectStandardError = false;
+                psi.UseShellExecute = false;
+                psi.CreateNoWindow = false;
+
+                Process p = Process.Start(psi);
+
+                p.WaitForExit();
+                if (p.ExitCode != 0)
+                {
+                    CppUtils.Alert(this,
+                        string.Format(Properties.Resources.S_JOIN_FAILED, p.ExitCode));
+                    return;
+                }
+
+                CppUtils.OpenFolder(this, outfile);
+
+                string prevsum = getSum().ToString().TrimEnd('0');
+                string resultsum = getVideoLength(outfile);
+
+                StringBuilder sbMessage = new StringBuilder();
+
+                sbMessage.AppendLine(string.Format(
+                    "{0}:\t\t{1}",
+                    Properties.Resources.S_DURATION_OF_INPUTFILES,
+                    prevsum));
+                sbMessage.AppendLine(string.Format(
+                    "{0}:\t\t{1}",
+                    Properties.Resources.S_DURATION_OUTPUT,
+                    resultsum));
+
+                sbMessage.AppendLine();
+                sbMessage.AppendLine(Properties.Resources.S_DO_YOU_WANT_TO_OPEN_CREATED_VIDEO);
+                if (DialogResult.Yes == CppUtils.CenteredMessageBox(this,
+                    sbMessage.ToString(),
+                    Application.ProductName,
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question))
+                {
+                    Process.Start(outfile);
+                }
+
+                //
+                // deleting original files
+                //
+                List<string> filesToDel = new List<string>();
+                foreach (ListViewItem item in lvMain.Items)
+                {
+                    filesToDel.Add(item.Text);
+                }
+
+                StringBuilder sbDeleteMessage = new StringBuilder();
+                sbDeleteMessage.AppendLine(string.Format(Properties.Resources.S_DO_YOU_WANT_TO_TRASH_FOLLOWING_N_ORIGINAL_FILES, filesToDel.Count));
+                sbDeleteMessage.AppendLine();
+                foreach (string file in filesToDel)
+                {
+                    sbDeleteMessage.AppendLine(file);
+                }
+                if (DialogResult.Yes == CppUtils.CenteredMessageBox(this,
+                    sbDeleteMessage.ToString(),
+                    Application.ProductName,
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question,
+                    MessageBoxDefaultButton.Button2))
+                {
+                    CppUtils.DeleteFiles(this, filesToDel.ToArray());
+                }
             }
-
-            CppUtils.OpenFolder(this, outfile);
-
-            string prevsum = getSum().ToString().TrimEnd('0');
-            string resultsum = getVideoLength(outfile);
-
-            StringBuilder sbMessage = new StringBuilder();
-            
-            sbMessage.AppendLine(string.Format(
-                "{0}:\t\t{1}",
-                Properties.Resources.S_DURATION_OF_INPUTFILES,
-                prevsum));
-             sbMessage.AppendLine(string.Format(
-                 "{0}:\t\t{1}",
-                 Properties.Resources.S_DURATION_OUTPUT,
-                 resultsum));
-
-            sbMessage.AppendLine();
-            sbMessage.AppendLine(Properties.Resources.S_DO_YOU_WANT_TO_OPEN_CREATED_VIDEO);
-            if(DialogResult.Yes == CppUtils.CenteredMessageBox(this,
-                sbMessage.ToString(),
-                Application.ProductName,
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question))
+            finally
             {
-                Process.Start(outfile);
+                if(!string.IsNullOrEmpty(tempfile))
+                    File.Delete(tempfile);
             }
-
-            //
-            // deleting original files
-            //
-            List<string> filesToDel = new List<string>();
-            foreach (ListViewItem item in lvMain.Items)
-            {
-                filesToDel.Add(item.Text);
-            }
-
-            StringBuilder sbDeleteMessage = new StringBuilder();
-            sbDeleteMessage.AppendLine(string.Format(Properties.Resources.S_DO_YOU_WANT_TO_TRASH_FOLLOWING_N_ORIGINAL_FILES,filesToDel.Count));
-            sbDeleteMessage.AppendLine();
-            foreach(string file in filesToDel)
-            {
-                sbDeleteMessage.AppendLine(file);
-            }
-            if(DialogResult.Yes == CppUtils.CenteredMessageBox(this,
-                sbDeleteMessage.ToString(),
-                Application.ProductName,
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question,
-                MessageBoxDefaultButton.Button2))
-            {
-                CppUtils.DeleteFiles(this, filesToDel.ToArray());
-            }
-
-            // deleting temp file
-            File.Delete(tempfile);
         }
 
         private bool _reverse = false;
@@ -561,11 +642,17 @@ namespace ffjoin
             }
         }
 
+
         private void btnJoinDifferent_Click(object sender, EventArgs e)
+        {
+            doJoinCommon(true);
+        }
+
+        private void btnJoinDifferent_Click_obsolete(object sender, EventArgs e)
         {
             if (lvMain.Items.Count < 2)
             {
-                Alert(Properties.Resources.S_LESSTHAN_TWO_ITEMS);
+                CppUtils.Alert(Properties.Resources.S_CONFIRM_JOIN_ONEITEM);
                 return;
             }
             string outfilename = null;
@@ -653,6 +740,9 @@ namespace ffjoin
 
             argument += "\"" + outfile + "\"";
 
+
+            //
+            // -i "C:\Users\bjdTfeRf\Desktop\yyy\1.mp4" -i "C:\Users\bjdTfeRf\Desktop\yyy\2.mp4" -i "C:\Users\bjdTfeRf\Desktop\yyy\3.mp4" -filter_complex "[0:v:0] [0:a:0] [1:v:0] [1:a:0] [2:v:0] [2:a:0] concat=n=3:v=1:a=1 [v] [a]" -map "[v]" -map "[a]" "C:\Users\bjdTfeRf\Desktop\yyy\111.mp4"
             ProcessStartInfo psi = new ProcessStartInfo();
             psi.FileName = ffmpeg;
             psi.Arguments = argument;

@@ -132,6 +132,9 @@
   <data name="S_CHOOSE_FFMPEG" xml:space="preserve">
     <value>Choose ffmpeg</value>
   </data>
+  <data name="S_CONFIRM_JOIN_ONEITEM" xml:space="preserve">
+    <value>The list has only one item. Do you want to continue?</value>
+  </data>
   <data name="S_DIFFERENT_EXTENSION" xml:space="preserve">
     <value>File extensions are different.</value>
   </data>
@@ -156,7 +159,7 @@
   <data name="S_JOIN_FAILED" xml:space="preserve">
     <value>Joining failed. (ExitCode = {0})</value>
   </data>
-  <data name="S_LESSTHAN_TWO_ITEMS" xml:space="preserve">
-    <value>It needs at least two files to join.</value>
+  <data name="S_NO_ITEMS" xml:space="preserve">
+    <value>No items in the list.</value>
   </data>
 </root>

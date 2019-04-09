@@ -1,6 +1,6 @@
 {
 	"name": "ffjoin",
-	"solution": "ffjoin2013.sln",
+	"solution": "ffjoin.sln",
 	
 	"targetproject": "zzzDist",
 	"configuration": "zzzDist",
