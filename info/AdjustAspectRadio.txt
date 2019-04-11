@@ -1,0 +1,5 @@
+﻿$ ffmpeg -i sample_1.mp4 -i sample_2.mp4 -filter_complex "[0:v]setdar=16:9[0v]; [1:v]setdar=16:9[1v]; [0v][0:a][1v][1:a]concat=n=2:v=1:a=1" sample_1_2.mp4
+# あるいは...
+-filter_complex "[0:v]setsar=1:1[0v]; [1:v]setsar=1:1[1v]; [0v][0:a][1v][1:a]concat=n=2:v=1:a=1" sample_1_2.mp4
+
+-filter_complex "[0:v:0] [0:a:0] [1:v:0] [1:a:0] concat=n=2:v=1:a=1 [v] [a]" -map "[v]" -map "[a]" "C:\T\222\646464.mp4"

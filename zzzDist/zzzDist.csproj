@@ -42,19 +42,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="v2v4.exe.config" />
+    <None Include="v2v4.exe.config.obsoletes" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-copy "$(SolutionDir)ffjoin\history.txt" "$(TargetDir)"
-copy "$(SolutionDir)ffjoin\Copying.txt" "$(TargetDir)"
+    <PostBuildEvent>copy "$(SolutionDir)ffjoin\dist\history.txt" "$(OutDir)"
+copy "$(SolutionDir)ffjoin\dist\Copying.txt" "$(OutDir)"
 
-
-
-
-
-del "$(TargetDir)zzzDist.*"
+del "$(OutDir)zzzDist.*"
 echo "OK"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

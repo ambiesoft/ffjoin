@@ -231,7 +231,7 @@ namespace ffjoin
         }
         private void calcSum()
         {
-            txtAllduration.Text = getSum().ToString().TrimEnd('0');
+            slDuration.Text = getSum().ToString().TrimEnd('0');
         }
         private void lvMain_DragEnter(object sender, DragEventArgs e)
         {
@@ -314,7 +314,20 @@ namespace ffjoin
         {
             doJoinCommon(false);
         }
+        private void btnJoinDifferent_Click(object sender, EventArgs e)
+        {
+            doJoinCommon(true);
+        }
+        private void btnJoinDifferentH265_Click(object sender, EventArgs e)
+        {
+            doJoinCommon(true, true);
+        }
         private void doJoinCommon(bool bReEncode)
+        {
+            doJoinCommon(bReEncode, false);
+        }
+
+        private void doJoinCommon(bool bReEncode, bool bH265)
         {
             if (lvMain.Items.Count < 1)
             {
@@ -520,10 +533,14 @@ namespace ffjoin
 
                     argument += string.Format("concat=n={0}:v=1:a=1 [v] [a]\" ", lvMain.Items.Count);
                     argument += "-map \"[v]\" -map \"[a]\" ";
+                    if (bH265)
+                        argument += "-vcodec libx265 ";
                     argument += "\"" + outfile + "\"";
                 }
 
-
+                //int retval;
+                //string output, err;
+                //AmbLib.OpenCommandGetResult(ffmpeg, argument, Encoding.UTF8, out retval, out output, out err);
                 ProcessStartInfo psi = new ProcessStartInfo();
                 psi.FileName = ffmpeg;
                 psi.Arguments = argument;
@@ -643,10 +660,7 @@ namespace ffjoin
         }
 
 
-        private void btnJoinDifferent_Click(object sender, EventArgs e)
-        {
-            doJoinCommon(true);
-        }
+      
 
         private void btnJoinDifferent_Click_obsolete(object sender, EventArgs e)
         {
@@ -883,6 +897,17 @@ namespace ffjoin
                 Cursor = Cursors.Default;
             }
         }
+
+        private void removeFromTheListToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            while(lvMain.SelectedItems.Count != 0)
+            {
+                lvMain.SelectedItems[0].Remove();
+            }
+            calcSum();
+        }
+
+       
 
       
 

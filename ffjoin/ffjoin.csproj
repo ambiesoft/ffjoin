@@ -91,7 +91,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.ja.resx" />
-    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -104,8 +103,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
-    <Content Include="history.txt" />
-    <Content Include="copying.txt" />
+    <Content Include="dist\history.txt" />
+    <Content Include="dist\copying.txt" />
     <Content Include="Readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
